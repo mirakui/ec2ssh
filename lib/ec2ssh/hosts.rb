@@ -1,8 +1,12 @@
 module Ec2ssh
+  class AwsEnvNotDefined < StandardError; end
   class Hosts
     def initialize
-      @access_key_id = ENV["AMAZON_ACCESS_KEY_ID"]
-      @secret_access_key = ENV["AMAZON_SECRET_ACCESS_KEY"]
+      @access_key_id = ENV["AMAZON_ACCESS_KEY_ID"].to_s
+      @secret_access_key = ENV["AMAZON_SECRET_ACCESS_KEY"].to_s
+      if @access_key_id.length == 0 || @secret_access_key.length == 0
+        raise AwsEnvNotDefined
+      end
     end
 
     def all
