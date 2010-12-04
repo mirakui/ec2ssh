@@ -1,3 +1,4 @@
 *.swp
 vendor
 .bundle
+tmp
