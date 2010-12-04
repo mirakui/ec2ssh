@@ -1,3 +1,5 @@
+require 'pathname'
+
 module Ec2ssh
   class Config
     HEADER = "### EC2SSH BEGIN ###"
