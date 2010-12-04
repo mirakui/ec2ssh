@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require 'ec2ssh'
+Ec2ssh::CLI.start
