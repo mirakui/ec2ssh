@@ -11,14 +11,14 @@ module Ec2ssh
       @path = Pathname(path || "#{ENV['HOME']}/.ssh/config")
     end
 
-    def append_marker!
+    def append_mark!
       replace! ""
       open(@path, "a") do |f|
         f.puts wrap("")
       end
     end
 
-    def marker_exist?
+    def mark_exist?
       config_src =~ /#{HEADER}\n.*#{FOOTER}\n/m
     end
 
