@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    schop (1.0.0)
+    ec2ssh (1.0.2)
       highline (~> 1.6)
       ktheory-right_aws (~> 2.0.3)
       thor (~> 0.14.6)
@@ -19,7 +19,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ec2ssh!
   highline (~> 1.6)
   ktheory-right_aws (~> 2.0.3)
-  schop!
   thor (~> 0.14.6)
