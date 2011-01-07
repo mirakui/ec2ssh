@@ -26,8 +26,9 @@ module Ec2ssh
         instance_names[tag[:resource_id]] = tag[:value]
       end
       ec2.describe_instances.map do |instance|
-        instance_name = instance_names[instance[:aws_instance_id]]
-        instance_name ? {:host => "#{instance_name}.#{region}", :dns_name => instance[:dns_name]} : nil
+        instance_name = instance_names[instance[:aws_instance_id]] or next nil
+        dns_name = instance[:dns_name] or next nil
+        instance_name.empty? || dns_name.empty? ? nil : {:host => "#{instance_name}.#{region}", :dns_name => dns_name}
       end.compact
     end
   end
