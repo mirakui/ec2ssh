@@ -61,8 +61,10 @@ Set environment variables to access AWS such as:
     end
 
     [:red,:green,:yellow].each do |col|
-      define_method(col) do |str|
-        puts hl.color(str, col)
+      no_tasks do
+        define_method(col) do |str|
+          puts hl.color(str, col)
+        end
       end
     end
   end
