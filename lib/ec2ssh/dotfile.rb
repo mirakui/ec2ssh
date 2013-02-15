@@ -4,15 +4,15 @@ module Ec2ssh
   class Dotfile
     def initialize(config={})
       @config = {
-        'path' => "#{ENV['HOME']}/.ssh/config",
-        'access_key_id' => '',
-        'secret_access_key' => '',
-        'regions' => %(ap-northeast-1),
+        'path' => "~/.ssh/config",
+        'access_key_id' => ENV['AMAZON_ACCESS_KEY_ID'],
+        'secret_access_key' => ENV['AMAZON_SECRET_ACCESS_KEY'],
+        'regions' => %w(ap-northeast-1),
       }.merge(config)
     end
 
     def self.load(path)
-      new YAML.load(path)
+      new YAML.load(open(path).read)
     end
 
     def save(path)

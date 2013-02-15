@@ -1,3 +1,4 @@
 #!/usr/bin/env ruby
-require 'ec2ssh'
+$: << File.expand_path('../../lib', __FILE__)
+require 'ec2ssh/cli'
 Ec2ssh::CLI.start

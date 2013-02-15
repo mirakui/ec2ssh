@@ -17,17 +17,17 @@ module Ec2ssh
     end
 
     def all
-      dotfile['regions'].map {|region|
+      @dotfile['regions'].map {|region|
         process_region region
       }.flatten
     end
 
     private
       def process_region(region)
-        ec2(region).instances.map {|instance|
+        @ec2[region].instances.map {|instance|
           name = instance.tags['Name'] or next nil
-          dns = instance.dns_name or next nil
-          name.empty? || dns_name.empty? ? nil : {:host => "#{name}.#{region}", :dns_name => dns}
+          dns_name = instance.dns_name or next nil
+          name.empty? || dns_name.empty? ? nil : {:host => "#{name}.#{region}", :dns_name => dns_name}
         }.compact
       end
   end
