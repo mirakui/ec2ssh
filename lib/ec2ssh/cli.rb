@@ -27,7 +27,6 @@ module Ec2ssh
         red "Execute '#{$0} init --path=#{options.path}' first!"
         return
       end
-      hosts = Hosts.new.all
       config_str = config.wrap(hosts.map{|h|<<-END}.join)
 Host #{h[:host]}
   HostName #{h[:dns_name]}
@@ -55,13 +54,16 @@ Set environment variables to access AWS such as:
       green "Removed mark from #{options.path}"
     end
 
-    private
-    def hl
-      @hl ||= HighLine.new
-    end
+    no_tasks do
+      def hl
+        @hl ||= HighLine.new
+      end
 
-    [:red,:green,:yellow].each do |col|
-      no_tasks do
+      def hosts
+        @hosts ||= Hosts.new.all
+      end
+
+      [:red,:green,:yellow].each do |col|
         define_method(col) do |str|
           puts hl.color(str, col)
         end
