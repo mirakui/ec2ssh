@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["mirakui@tsuyabu.in"]
   s.homepage    = "http://github.com/mirakui/ec2ssh"
   s.summary     = %q{A ssh_config manager for AWS EC2}
-  s.description = %q{A ssh_config manager for AWS EC2}
+  s.description = %q{ec2ssh is a ssh_config manager for AWS EC2}
 
   s.rubyforge_project = "ec2ssh"
   s.add_dependency "thor", "~> 0.14.6"
