@@ -1,6 +1,7 @@
 require 'thor'
-require 'right_aws'
 require 'highline'
+require 'ec2ssh/hosts'
+require 'ec2ssh/ssh_config'
 
 module Ec2ssh
   class CLI < Thor
@@ -9,7 +10,7 @@ module Ec2ssh
     desc "init", "Add ec2ssh mark to ssh_config"
     method_option *path_option
     def init
-      config = Config.new(options.path)
+      config = SshConfig.new(options.path)
       if config.mark_exist?
         red "Marker already exists on #{options.path}"
         return
@@ -21,7 +22,7 @@ module Ec2ssh
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option *path_option
     def update
-      config = Config.new(options.path)
+      config = SshConfig.new(options.path)
       unless config.mark_exist?
         red "Marker not found on #{options.path}"
         red "Execute '#{$0} init --path=#{options.path}' first!"
@@ -45,7 +46,7 @@ Set environment variables to access AWS such as:
     desc "remove", "Remove ec2ssh mark from ssh_config"
     method_option *path_option
     def remove
-      config = Config.new(options.path)
+      config = SshConfig.new(options.path)
       unless config.mark_exist?
         red "Marker not found on #{options.path}"
         return
