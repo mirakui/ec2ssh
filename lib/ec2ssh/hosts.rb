@@ -1,10 +1,25 @@
+require 'pit'
+
 module Ec2ssh
   class AwsEnvNotDefined < StandardError; end
   class Hosts
-    def initialize
-      @access_key_id = ENV["AMAZON_ACCESS_KEY_ID"].to_s
-      @secret_access_key = ENV["AMAZON_SECRET_ACCESS_KEY"].to_s
-      if @access_key_id.length == 0 || @secret_access_key.length == 0
+    def initialize(options)
+      pit_key = options[:pit_key]
+
+      if ENV["AMAZON_ACCESS_KEY_ID"] && ENV["AMAZON_SECRET_ACCESS_KEY"]
+        @access_key_id = ENV["AMAZON_ACCESS_KEY_ID"].to_s
+        @secret_access_key = ENV["AMAZON_SECRET_ACCESS_KEY"].to_s
+      elsif pit_key
+        config = Pit.get(pit_key, :require => {
+          'access_key_id'     => 'Your Access Key ID to AWS',
+          'secret_access_key' => 'Your Secret Access Key to AWS',
+        })
+        @access_key_id     = config['access_key_id'].to_s
+        @secret_access_key = config['secret_access_key'].to_s
+      end
+
+      if (!@access_key_id     || @access_key_id.empty?) ||
+         (!@secret_access_key || @secret_access_key.empty?)
         raise AwsEnvNotDefined
       end
     end

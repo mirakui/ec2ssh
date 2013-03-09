@@ -20,6 +20,7 @@ module Ec2ssh
 
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option *path_option
+    method_option :pit_key, :type => :string
     def update
       config = Config.new(options.path)
       unless config.mark_exist?
@@ -27,7 +28,7 @@ module Ec2ssh
         red "Execute '#{$0} init --path=#{options.path}' first!"
         return
       end
-      hosts = Hosts.new.all
+      hosts = Hosts.new(:pit_key => options.pit_key).all
       config_str = config.wrap(hosts.map{|h|<<-END}.join)
 Host #{h[:host]}
   HostName #{h[:dns_name]}
@@ -36,11 +37,20 @@ Host #{h[:host]}
       yellow config_str
       green "Updated #{hosts.size} hosts on #{options.path}"
     rescue AwsEnvNotDefined
-      red <<-END 
-Set environment variables to access AWS such as:
-  export AMAZON_ACCESS_KEY_ID="..."
-  export AMAZON_SECRET_ACCESS_KEY="..."
-      END
+      red <<-END
+There are two ways to pass secret keys to AWS:
+
+1) Set environment variables
+
+$ export AMAZON_ACCESS_KEY_ID="..."
+$ export AMAZON_SECRET_ACCESS_KEY="..."
+
+2) Use pit
+
+pit command launches and asks you the keys along with the key name passed by `pit_key` option:
+
+$ ec2ssh update --pit_key your_key_name
+END
     end
 
     desc "remove", "Remove ec2ssh mark from ssh_config"
