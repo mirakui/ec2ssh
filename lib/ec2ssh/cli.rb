@@ -1,5 +1,6 @@
+require 'pit'
 require 'thor'
-require 'right_aws'
+require 'aws-sdk'
 require 'highline'
 
 module Ec2ssh

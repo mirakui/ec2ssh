@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "ec2ssh"
   s.add_dependency "thor", "~> 0.14.6"
   s.add_dependency "highline", "~> 1.6"
-  s.add_dependency "ktheory-right_aws", "~> 2.0.3"
   s.add_dependency "pit", "~> 0.0.7"
+  s.add_dependency "aws-sdk"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
