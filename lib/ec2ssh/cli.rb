@@ -23,6 +23,7 @@ module Ec2ssh
     end
 
     desc "update", "Update ec2 hosts list in ssh_config"
+    method_option :aws_key, :banner => 'aws key name', :default => 'default'
     def update
       config = SshConfig.new(config_path)
       unless config.mark_exist?
@@ -62,7 +63,7 @@ Set environment variables to access AWS such as:
       end
 
       def hosts
-        @hosts ||= Hosts.new(dotfile).all
+        @hosts ||= Hosts.new(dotfile, options.aws_key).all
       end
 
       def dotfile

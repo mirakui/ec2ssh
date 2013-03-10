@@ -4,14 +4,15 @@ require 'ec2ssh/dotfile'
 module Ec2ssh
   class AwsEnvNotDefined < StandardError; end
   class Hosts
-    def initialize(dotfile)
+    def initialize(dotfile, keyname)
       @dotfile = dotfile
       @ec2 = Hash.new do |h,region|
-        raise AwsEnvNotDefined if dotfile['access_key_id'].empty? || dotfile['secret_access_key'].empty?
+        key = dotfile.aws_key(keyname)
+        raise AwsEnvNotDefined if key['access_key_id'].empty? || key['secret_access_key'].empty?
         h[region] = AWS::EC2.new(
           :ec2_endpoint      => "#{region}.ec2.amazonaws.com",
-          :access_key_id     => dotfile['access_key_id'],
-          :secret_access_key => dotfile['secret_access_key'],
+          :access_key_id     => key['access_key_id'],
+          :secret_access_key => key['secret_access_key']
         )
       end
     end

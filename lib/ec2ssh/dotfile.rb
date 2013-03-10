@@ -1,12 +1,17 @@
 require 'yaml'
 
 module Ec2ssh
+  class AwsKeyNotFound < StandardError; end
   class Dotfile
     def initialize(config={})
       @config = {
         'path' => "~/.ssh/config",
-        'access_key_id' => ENV['AMAZON_ACCESS_KEY_ID'],
-        'secret_access_key' => ENV['AMAZON_SECRET_ACCESS_KEY'],
+        'aws_keys' => {
+          'default' => {
+            'access_key_id' => ENV['AMAZON_ACCESS_KEY_ID'],
+            'secret_access_key' => ENV['AMAZON_SECRET_ACCESS_KEY']
+          }
+        },
         'regions' => %w(ap-northeast-1),
       }.merge(config)
     end
@@ -31,6 +36,10 @@ module Ec2ssh
 
     def [](key)
       @config[key]
+    end
+
+    def aws_key(keyname)
+      self['aws_keys'][keyname] or raise AwsKeyNotFound
     end
 
     def update(config)
