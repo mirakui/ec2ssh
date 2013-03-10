@@ -38,12 +38,8 @@ Host #{h[:host]}
       config.replace! config_str
       yellow config_str
       green "Updated #{hosts.size} hosts on #{config_path}"
-    rescue AwsEnvNotDefined
-      red <<-END
-Set environment variables to access AWS such as:
-  export AMAZON_ACCESS_KEY_ID="..."
-  export AMAZON_SECRET_ACCESS_KEY="..."
-      END
+    rescue AwsEnvNotDefined, AwsKeyNotFound
+      red "Set aws keys at #{options.dotfile}"
     end
 
     desc "remove", "Remove ec2ssh mark from ssh_config"
