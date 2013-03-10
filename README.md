@@ -6,19 +6,19 @@ ec2ssh is a ssh_config manager for amazonaws ec2.
 ### 1. Set 'Name' tag to your instances
 eg. Tag 'app-server-1' as 'Name' to an instance i-xxxxx in us-west-1 region.
 
-### 2. install ec2ssh
+### 2. Install ec2ssh
 
 ```
 $ gem install ec2ssh
 ```
 
-### 3. execute `ec2ssh init`
+### 3. Execute `ec2ssh init`
 
 ```
 $ ec2ssh init
 ```
 
-### 4. edit `.ec2ssh`
+### 4. Edit `.ec2ssh`
 
 ```
 $ vi ~/.ec2ssh
@@ -30,7 +30,7 @@ regions:
 - ap-northeast-1
 ```
 
-### 5. execute `ec2ssh update`
+### 5. Execute `ec2ssh update`
 
 ```
 $ ec2ssh update
