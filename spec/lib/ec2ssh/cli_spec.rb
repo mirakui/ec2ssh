@@ -17,7 +17,7 @@ describe Ec2ssh::CLI do
     end
   end
   let(:ssh_config_path) do
-    path = base_dir.join('tmp/ssh_config')
+    path = tmp_dir.join('ssh_config')
     path.open('w') {|f| f.write <<-END }
 Host foo.bar.com
   HostName 1.2.3.4

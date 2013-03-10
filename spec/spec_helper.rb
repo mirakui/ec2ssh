@@ -23,5 +23,15 @@ RSpec.configure do |config|
     Pathname('../..').expand_path(__FILE__)
   end
 
+  def tmp_dir
+    base_dir.join('tmp')
+  end
+
   alias :silence :capture
+
+  config.before(:all) do
+    unless tmp_dir.directory?
+      tmp_dir.mkdir
+    end
+  end
 end
