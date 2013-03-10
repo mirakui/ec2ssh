@@ -12,7 +12,7 @@ eg. Tag 'app-server-1' as 'Name' to an instance i-xxxxx in us-west-1 region.
 $ gem install ec2ssh
 ```
 
-### 3. execute `ec2ssh init` and edit `.ec2ssh`
+### 3. execute `ec2ssh init`
 
 ```
 $ ec2ssh init
