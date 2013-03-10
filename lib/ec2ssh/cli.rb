@@ -6,30 +6,28 @@ require 'ec2ssh/dotfile'
 
 module Ec2ssh
   class CLI < Thor
-    path_option = [:path, {:banner => "/path/to/ssh_config", :default=>"#{ENV['HOME']}/.ssh/config"}]
+    class_option :path, :banner => "/path/to/ssh_config"
     class_option :dotfile, :banner => '$HOME/.ec2ssh', :default => "#{ENV['HOME']}/.ec2ssh"
 
     desc "init", "Add ec2ssh mark to ssh_config"
-    method_option *path_option
     def init
-      config = SshConfig.new(options.path)
+      config = SshConfig.new(config_path)
       if config.mark_exist?
-        red "Marker already exists on #{options.path}"
-        return
+        red "Marker already exists on #{config_path}"
+      else
+        config.append_mark!
+        green "Added mark to #{config_path}"
       end
-      config.append_mark!
-      green "Added mark to #{options.path}"
-      Dotfile.new.save(options.dotfile)
+      dotfile = Dotfile.update_or_create(options.dotfile, 'path' => options.path)
       yellow "Please check and edit #{options.dotfile} before run `ec2ssh update`"
     end
 
     desc "update", "Update ec2 hosts list in ssh_config"
-    method_option *path_option
     def update
-      config = SshConfig.new(options.path)
+      config = SshConfig.new(config_path)
       unless config.mark_exist?
-        red "Marker not found on #{options.path}"
-        red "Execute '#{$0} init --path=#{options.path}' first!"
+        red "Marker not found on #{config_path}"
+        red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
         return
       end
       config_str = config.wrap(hosts.map{|h|<<-END}.join)
@@ -38,7 +36,7 @@ Host #{h[:host]}
       END
       config.replace! config_str
       yellow config_str
-      green "Updated #{hosts.size} hosts on #{options.path}"
+      green "Updated #{hosts.size} hosts on #{config_path}"
     rescue AwsEnvNotDefined
       red <<-END
 Set environment variables to access AWS such as:
@@ -48,15 +46,14 @@ Set environment variables to access AWS such as:
     end
 
     desc "remove", "Remove ec2ssh mark from ssh_config"
-    method_option *path_option
     def remove
-      config = SshConfig.new(options.path)
+      config = SshConfig.new(config_path)
       unless config.mark_exist?
-        red "Marker not found on #{options.path}"
+        red "Marker not found on #{config_path}"
         return
       end
       config.replace! ""
-      green "Removed mark from #{options.path}"
+      green "Removed mark from #{config_path}"
     end
 
     no_tasks do
@@ -70,6 +67,10 @@ Set environment variables to access AWS such as:
 
       def dotfile
         @dotfile ||= Dotfile.load(options.dotfile)
+      end
+
+      def config_path
+        options.path || dotfile['path'] || "#{$ENV['HOME']}/.ssh/config"
       end
 
       [:red,:green,:yellow].each do |col|

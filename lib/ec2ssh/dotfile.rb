@@ -19,8 +19,22 @@ module Ec2ssh
       open(path, 'w') {|f| f.write @config.to_yaml }
     end
 
+    def self.update_or_create(path, config={})
+      dotfile = if File.exist?(path)
+        Dotfile.load(path)
+      else
+        new
+      end
+      dotfile.update(config)
+      dotfile.save(path)
+    end
+
     def [](key)
       @config[key]
+    end
+
+    def update(config)
+      @config = @config.merge config
     end
   end
 end
