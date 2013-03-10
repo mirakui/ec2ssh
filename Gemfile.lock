@@ -7,7 +7,7 @@ PATH
       thor (~> 0.14.6)
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     addressable (2.3.2)
     aws-sdk (1.8.1.3)
