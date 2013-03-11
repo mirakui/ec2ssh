@@ -1,35 +1,42 @@
+require 'aws-sdk'
+require 'ec2ssh/dotfile'
+
 module Ec2ssh
   class AwsEnvNotDefined < StandardError; end
   class Hosts
-    def initialize
-      @access_key_id = ENV["AMAZON_ACCESS_KEY_ID"].to_s
-      @secret_access_key = ENV["AMAZON_SECRET_ACCESS_KEY"].to_s
-      if @access_key_id.length == 0 || @secret_access_key.length == 0
-        raise AwsEnvNotDefined
+    def initialize(dotfile, keyname)
+      @dotfile = dotfile
+      @ec2 = Hash.new do |h,region|
+        key = dotfile.aws_key(keyname)
+        raise AwsEnvNotDefined if key['access_key_id'].empty? || key['secret_access_key'].empty?
+        h[region] = AWS::EC2.new(
+          :ec2_endpoint      => "#{region}.ec2.amazonaws.com",
+          :access_key_id     => key['access_key_id'],
+          :secret_access_key => key['secret_access_key']
+        )
       end
     end
 
     def all
-      ec2 = RightAws::Ec2.new(@access_key_id, @secret_access_key)
-      regions = ec2.describe_regions
-      regions.map do |region|
+      @dotfile['regions'].map {|region|
         process_region region
-      end.flatten
+      }.flatten
     end
 
     private
-    def process_region(region)
-      ec2 = RightAws::Ec2.new(@access_key_id, @secret_access_key, :region => region)
-      instance_names = {}
-      ec2.describe_tags.each do |tag|
-        next unless tag[:key]=='Name' && tag[:resource_type]=='instance'
-        instance_names[tag[:resource_id]] = tag[:value]
+      def process_region(region)
+        instances(region).map {|instance|
+          name_tag = instance[:tag_set].find {|tag| tag[:key] == 'Name' }
+          next nil if name_tag.nil? || name_tag[:value].empty?
+          name = name_tag[:value]
+          dns_name = instance[:dns_name] or next nil
+          {:host => "#{name}.#{region}", :dns_name => dns_name}
+        }.compact.sort {|a,b| a[:host] <=> b[:host] }
       end
-      ec2.describe_instances.map do |instance|
-        instance_name = instance_names[instance[:aws_instance_id]] or next nil
-        dns_name = instance[:dns_name] or next nil
-        instance_name.empty? || dns_name.empty? ? nil : {:host => "#{instance_name}.#{region}", :dns_name => dns_name}
-      end.compact
-    end
+
+      def instances(region)
+        response = @ec2[region].instances.tagged('Name').filtered_request(:describe_instances)
+        response[:instance_index].values
+      end
   end
 end

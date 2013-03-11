@@ -1,7 +1,7 @@
 require 'pathname'
 
 module Ec2ssh
-  class Config
+  class SshConfig
     HEADER = "### EC2SSH BEGIN ###"
     FOOTER = "### EC2SSH END ###"
 
