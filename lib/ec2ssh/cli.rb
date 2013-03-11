@@ -63,7 +63,13 @@ Host #{h[:host]}
       end
 
       def dotfile
-        @dotfile ||= Dotfile.load(options.dotfile)
+        @dotfile ||= begin
+          if File.exist?(options.dotfile)
+            Dotfile.load(options.dotfile)
+          else
+            Dotfile.new
+          end
+        end
       end
 
       def config_path
