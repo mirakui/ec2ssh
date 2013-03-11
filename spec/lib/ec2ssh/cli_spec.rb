@@ -33,7 +33,7 @@ Host foo.bar.com
     tz = ENV['TZ']
     ENV['TZ'] = 'UTC'
     Timecop.freeze(Time.local(2013,1,1,0,0,0)) { example.call }
-    ENV['TZ'] = 'tz'
+    ENV['TZ'] = tz
   end
 
   subject { ssh_config_string }
