@@ -1,4 +1,8 @@
 # Change Log
+## 2.0.1
+
+* Fix bugs around initializing dotfile.
+
 ## 2.0.0
 
 * Add dotfile (.ec2ssh); supports multiple aws keys with `$ ec2ssh update --aws-key keyname` option.
