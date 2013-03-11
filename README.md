@@ -53,11 +53,28 @@ $ ec2ssh update       # Update ec2 hosts list in ssh_config
 $ ec2ssh remove       # Remove ec2ssh mark from ssh_config
 ```
 
-Each command can use `--path` option to set ssh_config path. The default is "~/.ssh/config"
+## Options
+### --path
+Each command can use `--path` option to set ssh_config path. `~/.ssh/config` is default.
 
 ```
-$ ec2ssh init --path=/path/to/ssh_config
+$ ec2ssh init --path /path/to/ssh_config
 ```
+
+### --dotfile
+Each command can use `--dotfile` option to set dotfile (.ec2ssh) path. `~/.ec2ssh` is default.
+
+```
+$ ec2ssh init --dotfile /path/to/ssh_config
+```
+
+### --aws-key
+`ec2ssh update` allows `--aws-key` option. If you have multiple aws keys, you can choose from them as you like using this option. See Dotfile section for details.
+
+```
+$ ec2ssh update --aws-key my_key1
+```
+
 
 # ssh_config and mark lines
 `ec2ssh init` command inserts mark lines your `.ssh/config` such as:
@@ -87,6 +104,52 @@ Host db-server-1.ap-southeast-1
 ```
 
 `ec2ssh remove` command removes the mark lines.
+
+# Dotfile (.ec2ssh)
+Dotfile (`.ec2ssh`) is a feature which is released at v2.0.0. A template of `.ec2ssh` is created when you execute `ec2ssh init`.
+
+```
+$ ec2ssh init
+$ cat ~/.ec2ssh
+---
+path: /home/yourname/.ssh/config
+aws_keys:
+  default:
+    access_key_id: ...(Filled by ENV['AMAZON_ACCESS_KEY_ID']
+    secret_access_key: ...(Filled by ENV['AMAZON_SECRET_ACCESS_KEY'])
+regions:
+- ap-northeast-1
+```
+
+## multiple aws keys
+You can use multiple aws keys at `ec2ssh update` with `--aws-key` option.
+
+```
+$ cat ~/.ec2ssh
+---
+path: /home/yourname/.ssh/config
+aws_keys:
+  default:
+    access_key_id: ...
+    secret_access_key: ...
+  my_key1:
+    access_key_id: ...
+    secret_access_key: ...
+regions:
+- ap-northeast-1
+```
+
+Updating ssh_config by 'default' aws key:
+
+```
+$ ec2ssh update
+```
+
+Updates ssh_config by 'my_key1' aws key:
+
+```
+$ ec2ssh update --aws-key my_key1
+```
 
 # Notice
 `ec2ssh` command updates your `.ssh/config` file default. You should make a backup of it.
