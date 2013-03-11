@@ -18,7 +18,7 @@ module Ec2ssh
         config.append_mark!
         green "Added mark to #{config_path}"
       end
-      dotfile = Dotfile.update_or_create(options.dotfile, 'path' => options.path)
+      dotfile = Dotfile.update_or_create(options.dotfile, 'path' => config_path)
       yellow "Please check and edit #{options.dotfile} before run `ec2ssh update`"
     end
 
