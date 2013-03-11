@@ -15,6 +15,9 @@ describe Ec2ssh::CLI do
       end
     end
   end
+  before do
+    File.delete(dotfile_path) if File.exist?(dotfile_path)
+  end
   let(:cli) { described_class }
   let(:ssh_config_path) do
     path = tmp_dir.join('ssh_config')
