@@ -151,6 +151,15 @@ Updates ssh_config by 'my_key1' aws key:
 $ ec2ssh update --aws-key my_key1
 ```
 
+# How to upgrade from 1.x to 2.x
+If you have used ec2ssh-1.x, it seems that you may not have '~/.ec2ssh'.
+So you need execute `ec2ssh init` once to create `~/.ec2ssh`, and edit it as you like.
+
+```
+$ ec2ssh init
+$ vi ~/.ec2ssh
+```
+
 # Notice
 `ec2ssh` command updates your `.ssh/config` file default. You should make a backup of it.
 
