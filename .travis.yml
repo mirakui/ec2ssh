@@ -3,5 +3,5 @@ rvm:
   - 1.8.7
   - ree-1.8.7-2012.02
   - 1.9.3
-  - ruby-head
+  - 2.0.0
 script: 'bundle exec rspec spec'
