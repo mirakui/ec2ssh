@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mirakui/ec2ssh.png?branch=master)](https://travis-ci.org/mirakui/ec2ssh)
+
 # Introduction
 ec2ssh is a ssh_config manager for amazonaws ec2.
 `ec2ssh` command adds `Host` descriptions to ssh_config (~/.ssh/config default). 'Name' tag of instances are used as `Host` descriptions.
