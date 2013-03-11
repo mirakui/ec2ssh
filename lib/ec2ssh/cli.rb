@@ -73,7 +73,7 @@ Host #{h[:host]}
       end
 
       def config_path
-        options.path || dotfile['path'] || "#{$ENV['HOME']}/.ssh/config"
+        options.path || dotfile['path'] || "#{ENV['HOME']}/.ssh/config"
       end
 
       [:red,:green,:yellow].each do |col|

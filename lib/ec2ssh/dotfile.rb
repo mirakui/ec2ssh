@@ -5,7 +5,7 @@ module Ec2ssh
   class Dotfile
     def initialize(config={})
       @config = {
-        'path' => "~/.ssh/config",
+        'path' => "#{ENV['HOME']}/.ssh/config",
         'aws_keys' => {
           'default' => {
             'access_key_id' => ENV['AMAZON_ACCESS_KEY_ID'],
