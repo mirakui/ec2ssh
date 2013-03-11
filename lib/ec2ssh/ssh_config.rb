@@ -1,3 +1,4 @@
+require 'time'
 require 'pathname'
 
 module Ec2ssh
