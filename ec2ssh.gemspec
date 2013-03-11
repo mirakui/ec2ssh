@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name        = "ec2ssh"
   s.version     = Ec2ssh::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["mirakui"]
+  s.authors     = ["Issei Naruta"]
   s.email       = ["mimitako@gmail.com"]
   s.homepage    = "http://github.com/mirakui/ec2ssh"
   s.summary     = %q{A ssh_config manager for AWS EC2}
