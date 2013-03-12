@@ -26,8 +26,10 @@ $ ec2ssh init
 $ vi ~/.ec2ssh
 ---
 path: /path/to/ssh_config
-access_key_id: YOUR_ACCESS_KEY_ID
-secret_access_key: YOUR_SECRET_ACCESS_KEY
+aws_keys:
+  default:
+    access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
 regions:
 - ap-northeast-1
 ```
