@@ -1,4 +1,10 @@
 # Change Log
+## 2.0.2
+
+* Fix bug: Raises nil.empty? exception on ec2ssh update
+  if there're ec2 instances which have empty Name tag.
+  Thanks to @chiastolite #4
+
 ## 2.0.1
 
 * Fix bugs around initializing dotfile.
