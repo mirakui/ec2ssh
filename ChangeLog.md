@@ -1,4 +1,9 @@
 # Change Log
+## 2.0.3
+
+* Fix bug: Fix undefined method `empty?` when aws keys not set
+  Thanks to @2get #6
+
 ## 2.0.2
 
 * Fix bug: Raises nil.empty? exception on ec2ssh update
