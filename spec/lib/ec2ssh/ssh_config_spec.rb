@@ -48,7 +48,8 @@ END
       end
 
       it { expect(subject.sections.size).to be == 2 }
-      it { expect(subject.sections['foo']).to be_an_instance_of Ec2ssh::SshConfig::Section }    end
+      it { expect(subject.sections['foo']).to be_an_instance_of Ec2ssh::SshConfig::Section }
+    end
 
     context 'when multiple sections exist' do
       let(:path) { path = tmp_dir.join('ssh_config') }
