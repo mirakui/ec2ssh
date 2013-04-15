@@ -33,31 +33,7 @@ module Ec2ssh
       end
 
       config.parse!
-
-      section_str = hosts.map { |h| <<-END }.join
-Host #{h[:host]}
-  HostName #{h[:dns_name]}
-      END
-      config.sections[options.aws_key] ||= SshConfig::Section.new(
-        options.aws_key,
-        section_str
-      )
-
-      sections = config.sections.values.map do |section|
-        if (
-            # section is matched
-            (section.name == options.aws_key) ||
-
-            # for backward compatibility
-            (config.sections.size == 1 && options.aws_key != 'default')
-        )
-          section.name = options.aws_key
-          section.replace!(section_str)
-        end
-
-        section.to_s
-      end
-
+      sections = mung_sections(config)
       config_str = config.wrap(sections.join("\n"))
       config.replace! config_str
       yellow config_str
@@ -103,6 +79,32 @@ Host #{h[:host]}
       [:red,:green,:yellow].each do |col|
         define_method(col) do |str|
           puts hl.color(str, col)
+        end
+      end
+
+      def mung_sections(config)
+        section_str = hosts.map { |h| <<-END }.join
+Host #{h[:host]}
+  HostName #{h[:dns_name]}
+        END
+        config.sections[options.aws_key] ||= SshConfig::Section.new(
+          options.aws_key,
+          section_str
+        )
+
+        sections = config.sections.values.map do |section|
+          if (
+              # section is matched
+              (section.name == options.aws_key) ||
+
+              # for backward compatibility
+              (config.sections.size == 1 && options.aws_key != 'default')
+          )
+            section.name = options.aws_key
+            section.replace!(section_str)
+          end
+
+          section.to_s
         end
       end
     end

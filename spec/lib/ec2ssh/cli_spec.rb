@@ -104,16 +104,53 @@ END
     context do
       let(:keyname) { 'default' }
       it { should =~ /Updated 2 hosts/ }
+      it { should =~ /# section: default/ }
     end
 
     context do
       let(:keyname) { 'key1' }
       it { should =~ /Updated 2 hosts/ }
+      it { should =~ /# section: key1/ }
     end
 
     context do
       let(:keyname) { 'key2' }
       it { should_not =~ /^Updated 2 hosts/ }
+    end
+  end
+
+  describe '#update with aws-keys option in multiple times' do
+    before do
+      silence(:stdout) do
+        cli.start %W[init --path #{ssh_config_path} --dotfile #{dotfile_path}]
+      end
+      dotfile = Ec2ssh::Dotfile.load(dotfile_path)
+      dotfile['aws_keys']['key1'] = {
+        'access_key_id' => 'ACCESS_KEY_ID',
+        'secret_access_key' => 'SECRET_ACCESS_KEY'
+      }
+      dotfile['aws_keys']['key2'] = {
+        'access_key_id' => 'ACCESS_KEY_ID',
+        'secret_access_key' => 'SECRET_ACCESS_KEY'
+      }
+      @output = capture(:stdout) do
+        cli.start %W[update --path #{ssh_config_path} --dotfile #{dotfile_path} --aws-key key1]
+        cli.start %W[update --path #{ssh_config_path} --dotfile #{dotfile_path} --aws-key #{keyname}]
+      end
+    end
+
+    subject { @output }
+
+    context 'when updated by the same key' do
+      let(:keyname) { 'key1' }
+      it { subject.should     =~ /# section: key1/ }
+      it { subject.should_not =~ /# section: key2/ }
+    end
+
+    context 'when updated by different key' do
+      let(:keyname) { 'key2' }
+      it { subject.should =~ /# section: key1/ }
+      it { subject.should =~ /# section: key2/ }
     end
   end
 
