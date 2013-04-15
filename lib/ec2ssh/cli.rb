@@ -25,16 +25,16 @@ module Ec2ssh
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option :aws_key, :banner => 'aws key name', :default => 'default'
     def update
-      config = SshConfig.new(config_path)
+      config = SshConfig.new(config_path, options.aws_key)
       unless config.mark_exist?
         red "Marker not found on #{config_path}"
         red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
         return
       end
-      config_str = config.wrap(hosts.map{|h|<<-END}.join)
-Host #{h[:host]}
-  HostName #{h[:dns_name]}
-      END
+
+      config.parse!
+      sections = merge_sections(config)
+      config_str = config.wrap(sections.join("\n"))
       config.replace! config_str
       yellow config_str
       green "Updated #{hosts.size} hosts on #{config_path}"
@@ -79,6 +79,32 @@ Host #{h[:host]}
       [:red,:green,:yellow].each do |col|
         define_method(col) do |str|
           puts hl.color(str, col)
+        end
+      end
+
+      def merge_sections(config)
+        section_str = hosts.map { |h| <<-END }.join
+Host #{h[:host]}
+  HostName #{h[:dns_name]}
+        END
+        config.sections[options.aws_key] ||= SshConfig::Section.new(
+          options.aws_key,
+          section_str
+        )
+
+        sections = config.sections.values.map do |section|
+          if (
+              # section is matched
+              (section.name == options.aws_key) ||
+
+              # for backward compatibility
+              (config.sections.size == 1 && options.aws_key != 'default')
+          )
+            section.name = options.aws_key
+            section.replace!(section_str)
+          end
+
+          section.to_s
         end
       end
     end

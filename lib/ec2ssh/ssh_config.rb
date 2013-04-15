@@ -6,10 +6,31 @@ module Ec2ssh
     HEADER = "### EC2SSH BEGIN ###"
     FOOTER = "### EC2SSH END ###"
 
-    attr_reader :path
+    attr_reader :path, :sections
 
-    def initialize(path=nil)
-      @path = Pathname(path || "#{ENV['HOME']}/.ssh/config")
+    def initialize(path=nil, aws_key='default')
+      @path     = Pathname(path || "#{ENV['HOME']}/.ssh/config")
+      @aws_key  = aws_key
+      @sections = {}
+    end
+
+    def parse!
+      return unless mark_exist?
+      ec2_config = config_src.match(/#{HEADER}\n(.*)#{FOOTER}/m).to_s
+
+      current_section = 'default'
+      @sections[current_section] = Section.new('default')
+
+      ec2_config.split(/\n+/).each do |line|
+        if line =~ /#{Section::HEADER} (.+)/
+          current_section = $1
+          @sections[current_section] ||= Section.new(current_section)
+        elsif line =~ /^#/ # ignore
+        elsif line =~ /^$/ # ignore
+        else
+          @sections[current_section].append("#{line}\n")
+        end
+      end
     end
 
     def append_mark!
@@ -48,6 +69,37 @@ module Ec2ssh
 #{text}
 #{FOOTER}
       END
+    end
+
+    class Section
+      HEADER = "# section:"
+
+      attr_accessor :name
+      attr_reader   :text
+
+      def initialize(name, text = '')
+        @name = name
+        @text = text
+      end
+
+      def append(text)
+        @text << text
+      end
+
+      def replace!(text)
+        @text = text
+      end
+
+      def to_s
+        if text.empty?
+          ""
+        else
+          <<-EOS
+#{HEADER} #{@name}
+#{@text}
+          EOS
+        end
+      end
     end
   end
 end
