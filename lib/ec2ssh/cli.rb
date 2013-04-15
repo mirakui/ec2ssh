@@ -33,7 +33,7 @@ module Ec2ssh
       end
 
       config.parse!
-      sections = mung_sections(config)
+      sections = merge_sections(config)
       config_str = config.wrap(sections.join("\n"))
       config.replace! config_str
       yellow config_str
@@ -82,7 +82,7 @@ module Ec2ssh
         end
       end
 
-      def mung_sections(config)
+      def merge_sections(config)
         section_str = hosts.map { |h| <<-END }.join
 Host #{h[:host]}
   HostName #{h[:dns_name]}
