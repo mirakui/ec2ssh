@@ -1,4 +1,8 @@
 # Change Log
+## 2.0.5
+
+* Updated README.md along with fixing a bug at version 2.0.4 (#9)
+
 ## 2.0.4
 
 * Store multiple hosts info per `--aws_key` (#8)
