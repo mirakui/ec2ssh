@@ -1,4 +1,8 @@
 # Change Log
+## 2.0.4
+
+* Store multiple hosts info per `--aws_key` (#8)
+
 ## 2.0.3
 
 * Fix bug: Fix undefined method `empty?` when aws keys not set
