@@ -28,7 +28,7 @@ module Ec2ssh
         instances(region).map {|instance|
           name_tag = instance[:tag_set].find {|tag| tag[:key] == 'Name' }
           next nil if name_tag.nil? || name_tag[:value].nil?
-          name = name_tag[:value]
+          name = "#{name_tag[:value]}_#{instance[:instance_id]}"
           dns_name = instance[dns_name_key.to_sym] or next nil
           {:host => "#{name}.#{region}", :dns_name => dns_name}
         }.compact.sort {|a,b| a[:host] <=> b[:host] }

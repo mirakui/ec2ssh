@@ -50,7 +50,7 @@ $ ssh app-server-1.us-west-1
 
 ## optional: VPC
 
-### Apend bastion server information to .ec2ssh
+### Append bastion server information to .ec2ssh
 
 ````
 path: /path/to/ssh_config
