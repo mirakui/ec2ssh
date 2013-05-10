@@ -48,6 +48,28 @@ Then host-names of your instances are generated and wrote to .ssh/config
 $ ssh app-server-1.us-west-1
 ```
 
+## optional: VPC
+
+### Apend bastion server information to .ec2ssh
+
+````
+path: /path/to/ssh_config
+aws_keys:
+  default:
+  access_key_id: YOUR_ACCESS_KEY_ID
+    secret_access_key: YOUR_SECRET_ACCESS_KEY
+regions:
+ - ap-northeast-1
+ssh_config_keywords:
+ - ProxyCommand ssh -o ServerAliveInterval=60 YOUR_BASTION_SERVER nc %h %p
+````
+
+### Execute ec2ssh update with "--dns-name-key private_dns_name" option
+
+```
+$ ec2ssh update --dns-name-key private_dns_name
+```
+
 # Commands
 ```
 $ ec2ssh help [TASK]  # Describe available tasks or one specific task
