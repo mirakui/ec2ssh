@@ -156,6 +156,28 @@ Updates ssh_config by 'my_key1' aws key:
 $ ec2ssh update --aws-key my_key1
 ```
 
+## ssh options
+You can set other ssh options such as IdentityFile or User.
+
+```
+$ cat ~/.ec2ssh
+---
+path: /home/yourname/.ssh/config
+aws_keys:
+  default:
+    access_key_id: ...
+    secret_access_key: ...
+  my_key1:
+    access_key_id: ...
+    secret_access_key: ...
+regions:
+  - ap-northeast-1
+ssh_options:
+  - "IdentityFile ~/.ssh/ec2.id_rsa"
+  - "User ec2-user"
+  - "TCPKeepAlive yes"
+```
+
 # How to upgrade from 1.x to 2.x
 If you have used ec2ssh-1.x, it seems that you may not have '~/.ec2ssh'.
 So you need execute `ec2ssh init` once to create `~/.ec2ssh`, and edit it as you like.
