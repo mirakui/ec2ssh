@@ -9,11 +9,17 @@ describe Ec2ssh::CLI do
         def instances region
           [
             {:tag_set => [{:key=>"Name", :value=>"db-01"}],
-             :dns_name => 'ec2-1-1-1-1.ap-northeast-1.ec2.amazonaws.com',
-             :private_dns_name => 'ec2-1-1-1-1.ap-northeast-1.compute.internal'},
+             :instance_id => 'i-01234560',
+             :dns_name => 'ec2-1-1-1-1.ap-northeast-1.ec2.amazonaws.com'},
             {:tag_set => [{:key=>"Name", :value=>"db-02"}],
-             :dns_name => 'ec2-1-1-1-2.ap-northeast-1.ec2.amazonaws.com',
-             :private_dns_name => 'ec2-1-1-1-1.ap-northeast-1.compute.internal'},
+             :instance_id => 'i-01234561',
+             :dns_name => 'ec2-1-1-1-2.ap-northeast-1.ec2.amazonaws.com'},
+            {:tag_set => [{:key=>"Name", :value=>"private-web-as"}],
+             :instance_id => 'i-01234562',
+             :private_dns_name => 'ec2-1-1-1-2.ap-northeast-1.compute.internal'},
+            {:tag_set => [{:key=>"Name", :value=>"private-web-as"}],
+             :instance_id => 'i-01234563',
+             :private_dns_name => 'ec2-1-1-1-3.ap-northeast-1.compute.internal'},
           ]
         end
       end
@@ -107,11 +113,11 @@ Host foo.bar.com
 # DO NOT edit this block!
 # Updated 2013-01-01T00:00:00+00:00
 # section: default
-Host db-01.ap-northeast-1
-  HostName ec2-1-1-1-1.ap-northeast-1.compute.internal
+Host private-web-as.i-01234562.ap-northeast-1
+  HostName ec2-1-1-1-2.ap-northeast-1.compute.internal
   
-Host db-02.ap-northeast-1
-  HostName ec2-1-1-1-1.ap-northeast-1.compute.internal
+Host private-web-as.i-01234563.ap-northeast-1
+  HostName ec2-1-1-1-3.ap-northeast-1.compute.internal
   
 
 
