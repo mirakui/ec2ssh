@@ -64,10 +64,10 @@ ssh_config_keywords:
  - ProxyCommand ssh -o ServerAliveInterval=60 YOUR_BASTION_SERVER nc %h %p
 ````
 
-### Execute ec2ssh update with "--dns-name-key private_dns_name" option
+### Execute ec2ssh update with "--use-private-dns" option
 
 ```
-$ ec2ssh update --dns-name-key private_dns_name
+$ ec2ssh update --use-private-dns
 ```
 
 # Commands

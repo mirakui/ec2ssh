@@ -24,7 +24,7 @@ module Ec2ssh
 
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option :aws_key, :banner => 'aws key name', :default => 'default'
-    method_option :dns_name_key, :banner => 'non VPC instance: dns_name, VPN instance: private_dns_name', :default => 'dns_name'
+    method_option :use_private_dns, :banner => 'use private dns name', :default => false
     def update
       config = SshConfig.new(config_path, options.aws_key)
       unless config.mark_exist?
@@ -60,7 +60,7 @@ module Ec2ssh
       end
 
       def hosts
-        @hosts ||= Hosts.new(dotfile, options.aws_key).all(options.dns_name_key)
+        @hosts ||= Hosts.new(dotfile, options.aws_key).all(options.use_private_dns?)
       end
 
       def dotfile
