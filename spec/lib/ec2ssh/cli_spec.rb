@@ -9,17 +9,17 @@ describe Ec2ssh::CLI do
         def instances region
           [
             {:tag_set => [{:key=>"Name", :value=>"db-01"}],
-             :instance_id => 'i-01234560',
-             :dns_name => 'ec2-1-1-1-1.ap-northeast-1.ec2.amazonaws.com'},
+              :instance_id => 'i-01234560',
+              :dns_name => 'ec2-1-1-1-1.ap-northeast-1.ec2.amazonaws.com'},
             {:tag_set => [{:key=>"Name", :value=>"db-02"}],
-             :instance_id => 'i-01234561',
-             :dns_name => 'ec2-1-1-1-2.ap-northeast-1.ec2.amazonaws.com'},
+              :instance_id => 'i-01234561',
+              :dns_name => 'ec2-1-1-1-2.ap-northeast-1.ec2.amazonaws.com'},
             {:tag_set => [{:key=>"Name", :value=>"private-web-as"}],
-             :instance_id => 'i-01234562',
-             :private_dns_name => 'ec2-1-1-1-2.ap-northeast-1.compute.internal'},
+              :instance_id => 'i-01234562',
+              :private_dns_name => 'ec2-1-1-1-2.ap-northeast-1.compute.internal'},
             {:tag_set => [{:key=>"Name", :value=>"private-web-as"}],
-             :instance_id => 'i-01234563',
-             :private_dns_name => 'ec2-1-1-1-3.ap-northeast-1.compute.internal'},
+              :instance_id => 'i-01234563',
+              :private_dns_name => 'ec2-1-1-1-3.ap-northeast-1.compute.internal'},
           ]
         end
       end
@@ -69,15 +69,14 @@ Host foo.bar.com
   end
 
   describe '#update' do
-    context 'no use_private_dns option' do
-      before do
-        silence(:stdout) do
-          cli.start %W[init --path #{ssh_config_path} --dotfile #{dotfile_path}]
-          cli.start %W[update --path #{ssh_config_path} --dotfile #{dotfile_path}]
-        end
+    before do
+      silence(:stdout) do
+        cli.start %W[init --path #{ssh_config_path} --dotfile #{dotfile_path}]
+        cli.start %W[update --path #{ssh_config_path} --dotfile #{dotfile_path}]
       end
+    end
 
-      it { should eq(<<-END) }
+    it { should eq(<<-END) }
 Host foo.bar.com
   HostName 1.2.3.4
 ### EC2SSH BEGIN ###
@@ -94,18 +93,18 @@ Host db-02.ap-northeast-1
 
 
 ### EC2SSH END ###
-      END
+    END
+  end
+
+  describe '#update with use-private-dns option' do
+    before do
+      silence(:stdout) do
+        cli.start %W[init --path #{ssh_config_path} --dotfile #{dotfile_path}]
+        cli.start %W[update --path #{ssh_config_path} --dotfile #{dotfile_path} --use-private-dns]
+      end
     end
 
-    context 'with use_private_dns option' do
-      before do
-        silence(:stdout) do
-          cli.start %W[init --path #{ssh_config_path} --dotfile #{dotfile_path}]
-          cli.start %W[update --path #{ssh_config_path} --dotfile #{dotfile_path} --use-private-dns]
-        end
-      end
-
-      it { should eq(<<-END) }
+    it { should eq(<<-END) }
 Host foo.bar.com
   HostName 1.2.3.4
 ### EC2SSH BEGIN ###
@@ -122,8 +121,7 @@ Host private-web-as.i-01234563.ap-northeast-1
 
 
 ### EC2SSH END ###
-      END
-    end
+    END
   end
 
   describe '#update with aws-keys option' do
