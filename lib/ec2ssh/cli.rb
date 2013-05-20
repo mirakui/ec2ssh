@@ -84,12 +84,18 @@ module Ec2ssh
       end
 
       def merge_sections(config)
-        ssh_options = (dotfile['ssh_options'] || []).join("\n  ")
-        section_str = hosts.map { |h| <<-END }.join
+        sections = hosts.map { |h| <<-END }
 Host #{h[:host]}
   HostName #{h[:dns_name]}
-  #{ssh_options}
         END
+        unless dotfile['ssh_options'].size.zero?
+          ssh_options_str = dotfile['ssh_options'].join("\n  ").strip
+          sections.map! { |h| h << <<-END }
+  #{ssh_options_str}
+          END
+        end
+        section_str = sections.join
+
         config.sections[options.aws_key] ||= SshConfig::Section.new(
           options.aws_key,
           section_str
