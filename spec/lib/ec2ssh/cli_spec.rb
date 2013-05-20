@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ec2ssh/cli'
 require 'ec2ssh/dotfile'
-require 'pry'
+
 describe Ec2ssh::CLI do
   before(:all) do
     Ec2ssh::Hosts.tap do |cls|
