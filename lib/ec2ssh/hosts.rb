@@ -16,7 +16,7 @@ module Ec2ssh
         )
       end
     end
-    def all use_private_dns
+    def all(use_private_dns)
       @dotfile['regions'].map {|region|
         process_region region, use_private_dns
       }.flatten
