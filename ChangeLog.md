@@ -1,4 +1,9 @@
 # Change Log
+## 2.0.6
+
+* Change thor version specifier from 0.14.6 to 0.14 (#13)
+  Thanks to @memerelics
+
 ## 2.0.5
 
 * Updated README.md along with fixing a bug at version 2.0.4 (#9)
