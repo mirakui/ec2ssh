@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{ec2ssh is a ssh_config manager for AWS EC2}
 
   s.rubyforge_project = "ec2ssh"
-  s.add_dependency "thor", "~> 0.14.6"
+  s.add_dependency "thor", "~> 0.14"
   s.add_dependency "highline", "~> 1.6"
   s.add_dependency 'aws-sdk', '~> 1.8'
 
