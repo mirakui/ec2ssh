@@ -1,5 +1,5 @@
-*.swp
 vendor
 .bundle
 tmp
 *.gem
+Gemfile.lock
