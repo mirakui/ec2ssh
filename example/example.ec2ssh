@@ -1,3 +1,4 @@
+path '~/.ssh/config'
 aws_keys(
   {
     access_key_id: ENV['AWS_ACCESS_KEY_ID'],

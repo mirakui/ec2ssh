@@ -21,5 +21,9 @@ module Ec2ssh
     def skip_if(&block)
       @result[:skip_if] = block
     end
+
+    def path(str)
+      @result[:path] = str
+    end
   end
 end

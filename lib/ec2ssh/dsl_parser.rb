@@ -2,15 +2,17 @@ require 'ec2ssh/dsl'
 require 'aws-sdk'
 require 'erb'
 require 'stringio'
+require 'pathname'
 
 module Ec2ssh
   class DslParser
-    def initialize
+    def initialize(str)
+      @dsl_str = str
     end
 
-    def parse(str)
+    def parse!
       dsl = Dsl.new
-      dsl.instance_eval str
+      dsl.instance_eval @dsl_str
       @dsl = dsl.result
     end
 
@@ -39,11 +41,15 @@ module Ec2ssh
         end
       end
     end
+    private :_build_host_lines
 
     def instances(ec2)
       ec2.instances.
-        filter('instance-state-name', 'running')
+        filter('instance-state-name', 'running').
+        to_a.
+        sort_by {|ins| ins.tags['Name'] }
     end
+    private :instances
 
     def regions
       @dsl[:regions] || []
@@ -61,14 +67,16 @@ module Ec2ssh
       @dsl[:skip_if]
     end
 
-    def evaluate_host_lines(erb)
+    def path
+      @path ||= Pathname(@dsl[:path])
     end
   end
 end
 
 if $0 == __FILE__
-  parser = Ec2ssh::DslParser.new
   path = File.expand_path('../../../example/example.ec2ssh', __FILE__)
-  out = parser.parse File.read(path)
+  parser = Ec2ssh::DslParser.new(File.read(path))
+  out = parser.parse!
+  p out
   puts parser.host_lines
 end
