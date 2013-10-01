@@ -25,10 +25,15 @@ module Ec2ssh
 
     private
       def process_region(region)
+        hosts_count = Hash.new{|h,k|h[k]=0}
         instances(region).map {|instance|
           name_tag = instance[:tag_set].find {|tag| tag[:key] == 'Name' }
           next nil if name_tag.nil? || name_tag[:value].nil?
           name = name_tag[:value]
+          if (count = hosts_count[name]) > 0
+            name << '-' << count.to_s
+          end
+          hosts_count[name] += 1
           dns_name = instance[:dns_name] or next nil
           {:host => "#{name}.#{region}", :dns_name => dns_name}
         }.compact.sort {|a,b| a[:host] <=> b[:host] }
