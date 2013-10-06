@@ -25,23 +25,33 @@ module Ec2ssh
 
     private
       def process_region(region)
-        hosts_count = Hash.new{|h,k|h[k]=0}
+        host_tracker = Hash.new{|h,k|h[k]={:count => 0}}
         instances(region).map {|instance|
           name_tag = instance[:tag_set].find {|tag| tag[:key] == 'Name' }
           next nil if name_tag.nil? || name_tag[:value].nil?
           name = name_tag[:value]
-          if (count = hosts_count[name]) > 0
-            name << '-' << count.to_s
-          end
-          hosts_count[name] += 1
           dns_name = instance[:dns_name] or next nil
-          {:host => "#{name}.#{region}", :dns_name => dns_name}
+          uniquify(host_tracker, :host => "#{name}.#{region}", :dns_name => dns_name)
         }.compact.sort {|a,b| a[:host] <=> b[:host] }
       end
 
       def instances(region)
         response = @ec2[region].instances.tagged('Name').filtered_request(:describe_instances)
         response[:instance_index].values
+      end
+
+      def uniquify(host_tracker, item)
+        tracker = host_tracker[item[:host]]
+        tracker[:count] += 1
+        if tracker[:count] == 1
+          tracker[:first_item] = item
+        elsif tracker[:count] == 2
+          tracker[:first_item][:host] << '.1'
+          item[:host] << '.2'
+        else
+          item[:host] << ".#{tracker[:count]}"
+        end
+        return item
       end
   end
 end
