@@ -15,16 +15,16 @@ describe Ec2ssh::Dsl do
     end
   end
 
-  subject(:result) { dsl.instance_variable_get('@result') }
+  subject(:result) { dsl.result }
 
-  its([:aws_keys]) do
+  its(:aws_keys) do
     should == [
       { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
       { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
     ]
   end
-  its([:regions]) { should == ['ap-northeast-1', 'us-east-1'] }
-  its([:host_lines_erb]) { should == 'host lines' }
-  it { expect(result[:reject].call(123)).to eq(123) }
-  its([:path]) { should == 'path' }
+  its(:regions) { should == ['ap-northeast-1', 'us-east-1'] }
+  its(:host_lines) { should == 'host lines' }
+  it { expect(result.reject.call(123)).to eq(123) }
+  its(:path) { should == 'path' }
 end
