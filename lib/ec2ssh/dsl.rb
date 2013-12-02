@@ -18,8 +18,8 @@ module Ec2ssh
       @result[:host_lines_erb] = erb
     end
 
-    def skip_if(&block)
-      @result[:skip_if] = block
+    def reject(&block)
+      @result[:reject] = block
     end
 
     def path(str)
