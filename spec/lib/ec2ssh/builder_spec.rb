@@ -16,7 +16,7 @@ describe Ec2ssh::Builder do
 
     let(:builder) do
       Ec2ssh::Builder.new(container).tap do |bldr|
-        bldr.stub(:ec2s) { ec2s }
+        allow(bldr).to receive(:ec2s) { ec2s }
       end
     end
 
