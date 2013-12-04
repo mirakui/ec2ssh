@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'ec2ssh/cli'
 require 'ec2ssh/dotfile'
 
-describe Ec2ssh::CLI do
+describe Ec2ssh::CLI, pending: true do
   before(:all) do
     Ec2ssh::Hosts.tap do |cls|
       cls.class_eval do
