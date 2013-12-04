@@ -11,15 +11,8 @@ module Ec2ssh
 
     desc "init", "Add ec2ssh mark to ssh_config"
     def init
-      config = SshConfig.new(config_path)
-      if config.mark_exist?
-        red "Marker already exists on #{config_path}"
-      else
-        config.append_mark!
-        green "Added mark to #{config_path}"
-      end
-      dotfile = Dotfile.update_or_create(options.dotfile, 'path' => config_path)
-      yellow "Please check and edit #{options.dotfile} before run `ec2ssh update`"
+      require 'ec2ssh/command/init'
+      Ec2ssh::Command::Init.new(self).run
     end
 
     desc "update", "Update ec2 hosts list in ssh_config"
