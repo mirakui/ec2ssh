@@ -1,4 +1,9 @@
 # Change Log
+## 2.0.7
+
+* Add ssh_options (#11)
+  Thanks to @frsyuki
+
 ## 2.0.6
 
 * Change thor version specifier from 0.14.6 to 0.14 (#13)
