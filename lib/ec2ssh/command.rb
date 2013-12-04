@@ -10,7 +10,7 @@ module Ec2ssh
       end
 
       def dotfile
-        @dotfile ||= Ec2ssh::Dsl::Parser.parse(dotfile_path)
+        @dotfile ||= Ec2ssh::Dsl::Parser.parse_file(dotfile_path)
       end
 
       def ssh_config_path

@@ -41,6 +41,13 @@ module Ec2ssh
         dsl.instance_eval dsl_str
         dsl._result
       end
+
+      def self.parse_file(path)
+        raise DslFileNotFoundError unless File.exist?(path)
+        parse File.read(path)
+      end
     end
+
+    class DslFileNotFoundError < StandardError; end
   end
 end
