@@ -2,20 +2,23 @@ require 'spec_helper'
 require 'ec2ssh/dsl'
 
 describe Ec2ssh::Dsl do
-  let(:dsl) do
-    described_class.new.tap do |_dsl|
-      _dsl.aws_keys(
-        key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
-        key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
-      )
-      _dsl.regions 'ap-northeast-1', 'us-east-1'
-      _dsl.host_lines 'host lines'
-      _dsl.reject {|instance| instance }
-      _dsl.path 'path'
-    end
+  shared_examples 'a filled dsl container' do
   end
 
-  subject(:result) { dsl.result }
+  let(:dsl_str) do
+<<-END
+aws_keys(
+  key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
+  key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
+)
+regions 'ap-northeast-1', 'us-east-1'
+host_lines 'host lines'
+reject {|instance| instance }
+path 'path'
+END
+  end
+
+  subject(:result) { Ec2ssh::Dsl::Parser.parse dsl_str }
 
   its(:aws_keys) do
     should == {

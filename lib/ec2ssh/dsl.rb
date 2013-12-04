@@ -1,29 +1,29 @@
 module Ec2ssh
   class Dsl
-    attr_reader :result
+    attr_reader :_result
 
     def initialize
-      @result = Container.new
+      @_result = Container.new
     end
 
     def aws_keys(keys)
-      @result.aws_keys = keys
+      @_result.aws_keys = keys
     end
 
     def regions(*regions)
-      @result.regions = regions
+      @_result.regions = regions
     end
 
     def host_lines(erb)
-      @result.host_lines = erb
+      @_result.host_lines = erb
     end
 
     def reject(&block)
-      @result.reject = block
+      @_result.reject = block
     end
 
     def path(str)
-      @result.path = str
+      @_result.path = str
     end
 
     class Container < Struct.new(*%i[
@@ -33,6 +33,14 @@ module Ec2ssh
       reject
       path
     ])
+    end
+
+    module Parser
+      def self.parse(dsl_str)
+        dsl = Dsl.new
+        dsl.instance_eval dsl_str
+        dsl._result
+      end
     end
   end
 end
