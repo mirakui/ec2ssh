@@ -1,3 +1,5 @@
+require 'ec2ssh/exceptions'
+
 module Ec2ssh
   class Dsl
     attr_reader :_result
@@ -43,11 +45,9 @@ module Ec2ssh
       end
 
       def self.parse_file(path)
-        raise DslFileNotFoundError unless File.exist?(path)
+        raise DslFileNotFound unless File.exist?(path)
         parse File.read(path)
       end
     end
-
-    class DslFileNotFoundError < StandardError; end
   end
 end
