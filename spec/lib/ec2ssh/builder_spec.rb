@@ -47,5 +47,21 @@ Host srv3
 Host srv4
       END
     end
+
+    context 'with #reject' do
+      before do
+        container.reject = lambda {|ins| ins.tags['Name'] == 'srv1' }
+      end
+
+      it do
+        expect(builder.build_host_lines).to eq <<-END
+# section: key1
+Host srv2
+# section: key2
+Host srv3
+Host srv4
+        END
+      end
+    end
   end
 end
