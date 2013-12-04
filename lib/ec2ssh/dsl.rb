@@ -6,7 +6,7 @@ module Ec2ssh
       @result = Container.new
     end
 
-    def aws_keys(*keys)
+    def aws_keys(keys)
       @result.aws_keys = keys
     end
 

@@ -5,8 +5,8 @@ describe Ec2ssh::Dsl do
   let(:dsl) do
     described_class.new.tap do |_dsl|
       _dsl.aws_keys(
-        { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
-        { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
+        key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
+        key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
       )
       _dsl.regions 'ap-northeast-1', 'us-east-1'
       _dsl.host_lines 'host lines'
@@ -18,10 +18,10 @@ describe Ec2ssh::Dsl do
   subject(:result) { dsl.result }
 
   its(:aws_keys) do
-    should == [
-      { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
-      { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
-    ]
+    should == {
+      key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
+      key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
+    }
   end
   its(:regions) { should == ['ap-northeast-1', 'us-east-1'] }
   its(:host_lines) { should == 'host lines' }
