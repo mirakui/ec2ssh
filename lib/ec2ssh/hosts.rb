@@ -16,22 +16,33 @@ module Ec2ssh
         )
       end
     end
-
-    def all
+    def all(use_private_dns)
       @dotfile['regions'].map {|region|
-        process_region region
+        process_region region, use_private_dns
       }.flatten
     end
 
     private
-      def process_region(region)
-        instances(region).map {|instance|
+      def process_region(region, use_private_dns)
+        hosts = instances(region).map {|instance|
           name_tag = instance[:tag_set].find {|tag| tag[:key] == 'Name' }
           next nil if name_tag.nil? || name_tag[:value].nil?
-          name = name_tag[:value]
-          dns_name = instance[:dns_name] or next nil
-          {:host => "#{name}.#{region}", :dns_name => dns_name}
-        }.compact.sort {|a,b| a[:host] <=> b[:host] }
+          dns_name = instance[use_private_dns ? :private_dns_name : :dns_name] or next nil
+          {:host => "#{name_tag[:value]}.#{region}",
+           :name => name_tag[:value],
+           :dns_name => dns_name,
+           :instance_id => instance[:instance_id]}
+        }.compact
+        
+        host_names = hosts.map {|host| host[:name] }
+
+        hosts.map {|host|
+          suffix = region
+          suffix = "#{host[:instance_id]}.#{suffix}" unless host_names.one?{|name| name == host[:name]}
+          host[:host] = "#{host[:name]}.#{suffix}"
+
+          host
+        }.sort {|a,b| a[:host] <=> b[:host] }
       end
 
       def instances(region)

@@ -24,6 +24,7 @@ module Ec2ssh
 
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option :aws_key, :banner => 'aws key name', :default => 'default'
+    method_option :use_private_dns, :banner => 'use private dns name', :default => false
     def update
       config = SshConfig.new(config_path, options.aws_key)
       unless config.mark_exist?
@@ -59,7 +60,7 @@ module Ec2ssh
       end
 
       def hosts
-        @hosts ||= Hosts.new(dotfile, options.aws_key).all
+        @hosts ||= Hosts.new(dotfile, options.aws_key).all(options.use_private_dns?)
       end
 
       def dotfile
@@ -83,10 +84,18 @@ module Ec2ssh
       end
 
       def merge_sections(config)
-        section_str = hosts.map { |h| <<-END }.join
+        sections = hosts.map { |h| <<-END }
 Host #{h[:host]}
   HostName #{h[:dns_name]}
         END
+        unless dotfile['ssh_options'].size.zero?
+          ssh_options_str = dotfile['ssh_options'].join("\n  ").strip
+          sections.map! { |h| h << <<-END }
+  #{ssh_options_str}
+          END
+        end
+        section_str = sections.join
+
         config.sections[options.aws_key] ||= SshConfig::Section.new(
           options.aws_key,
           section_str

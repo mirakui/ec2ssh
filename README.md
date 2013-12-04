@@ -78,6 +78,14 @@ $ ec2ssh init --dotfile /path/to/ssh_config
 $ ec2ssh update --aws-key my_key1
 ```
 
+### --use-private-dns
+
+`ec2ssh update` allows `--use-private-dns` option. Use private dns name as HostName in ssh_config when using this option.
+
+```
+$ ec2ssh update --use-private-dns
+```
+
 
 # ssh_config and mark lines
 `ec2ssh init` command inserts mark lines your `.ssh/config` such as:
@@ -154,6 +162,29 @@ Updates ssh_config by 'my_key1' aws key:
 
 ```
 $ ec2ssh update --aws-key my_key1
+```
+
+## ssh options
+You can set other ssh options such as IdentityFile or User.
+
+```
+$ cat ~/.ec2ssh
+---
+path: /home/yourname/.ssh/config
+aws_keys:
+  default:
+    access_key_id: ...
+    secret_access_key: ...
+  my_key1:
+    access_key_id: ...
+    secret_access_key: ...
+regions:
+  - ap-northeast-1
+ssh_options:
+  - "IdentityFile ~/.ssh/ec2.id_rsa"
+  - "User ec2-user"
+  - "TCPKeepAlive yes"
+  - "ProxyCommand ssh -o ServerAliveInterval=60 YOUR_BASTION_SERVER nc %h %p"
 ```
 
 # How to upgrade from 1.x to 2.x
