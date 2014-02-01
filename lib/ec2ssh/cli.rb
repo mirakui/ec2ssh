@@ -1,6 +1,5 @@
 require 'thor'
 require 'highline'
-require 'ec2ssh/hosts'
 require 'ec2ssh/ssh_config'
 require 'ec2ssh/dotfile'
 
@@ -11,8 +10,7 @@ module Ec2ssh
 
     desc "init", "Add ec2ssh mark to ssh_config"
     def init
-      require 'ec2ssh/command/init'
-      Ec2ssh::Command::Init.new(self).run
+      run_command :init
     end
 
     desc "update", "Update ec2 hosts list in ssh_config"
@@ -63,6 +61,12 @@ module Ec2ssh
             Dotfile.new
           end
         end
+      end
+
+      def run_command(cmd)
+        require "ec2ssh/command/#{cmd}"
+        cls = eval "Ec2ssh::Command::#{cmd.capitalize}"
+        cls.new(self).run
       end
 
       def config_path

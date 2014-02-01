@@ -1,9 +1,11 @@
 require 'bundler/setup'
 Bundler.require
 
+require 'fakefs'
 require 'webmock/rspec'
 require 'pathname'
 require 'stringio'
+require 'fileutils'
 
 RSpec.configure do |config|
   def capture(stream)
@@ -19,19 +21,15 @@ RSpec.configure do |config|
     result
   end
 
-  def base_dir
-    Pathname('../..').expand_path(__FILE__)
-  end
-
   def tmp_dir
-    base_dir.join('tmp')
+    Pathname('/fakefs/ec2ssh')
   end
 
   alias :silence :capture
 
   config.before(:all) do
     unless tmp_dir.directory?
-      tmp_dir.mkdir
+      FileUtils.mkdir_p tmp_dir
     end
   end
 end
