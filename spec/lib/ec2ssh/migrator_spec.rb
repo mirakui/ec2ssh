@@ -13,13 +13,25 @@ describe Ec2ssh::Migrator do
 ---
 path: /path/to/ssh/config
 aws_keys:
-  default:
+  key1:
     access_key_id: ACCESS_KEY1
     secret_access_key: SECRET1
+  key2:
+    access_key_id: ACCESS_KEY2
+    secret_access_key: SECRET2
 regions:
 - ap-northeast-1
+- us-east-1
     END
 
-    its(:check_version) { should eq('2') }
+    it { expect(migrator.check_version).to eq('2') }
+    it { expect(migrator.migrate_from_2).to eq(<<-END) }
+path '/path/to/ssh/config'
+aws_keys(
+  key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
+  key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
+)
+regions 'ap-northeast-1', 'us-east-1'
+    END
   end
 end
