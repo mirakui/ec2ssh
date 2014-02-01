@@ -34,13 +34,11 @@ module Ec2ssh
 
     desc "remove", "Remove ec2ssh mark from ssh_config"
     def remove
-      config = SshConfig.new(config_path)
-      unless config.mark_exist?
-        red "Marker not found on #{config_path}"
-        return
-      end
-      config.replace! ""
-      green "Removed mark from #{config_path}"
+      command = make_command :remove
+      command.run
+      green "Removed mark from #{command.ssh_config_path}"
+    rescue MarkNotFound
+      red "Marker not found in #{command.ssh_config_path}"
     end
 
     no_tasks do
