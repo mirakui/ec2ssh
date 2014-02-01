@@ -12,12 +12,11 @@ module Ec2ssh
     def make_ec2s
       AWS.start_memoizing
       _ec2s = {}
-      aws_keys.each do |key|
-        key_name = aws_keys[:key_name] || aws_keys[:access_key_id]
-        _ec2s[key_name] = {}
-        regions.each do |region|
+      aws_keys.each do |name, key|
+        _ec2s[name] = {}
+        @regions.each do |region|
           options = key.merge ec2_region: region
-          _ec2s[key_name][region] = AWS::EC2.new options
+          _ec2s[name][region] = AWS::EC2.new options
         end
       end
       _ec2s

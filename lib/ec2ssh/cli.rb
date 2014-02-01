@@ -8,6 +8,7 @@ module Ec2ssh
   class CLI < Thor
     class_option :path, banner: "/path/to/ssh_config"
     class_option :dotfile, banner: '$HOME/.ec2ssh', default: "#{ENV['HOME']}/.ec2ssh"
+    class_option :verbose, banner: 'enable debug log', default: false
 
     desc "init", "Add ec2ssh mark to ssh_config"
     def init
@@ -20,6 +21,7 @@ module Ec2ssh
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option :aws_key, :banner => 'aws key name', :default => 'default'
     def update
+      set_aws_logging
       command = make_command :update
       command.run
       green "Updated #{command.ssh_config_path}"
@@ -48,8 +50,18 @@ module Ec2ssh
         cls.new(self)
       end
 
+      def set_aws_logging
+        if options.verbose
+          require 'logger'
+          require 'aws-sdk'
+          logger = ::Logger.new($stdout)
+          logger.level = ::Logger::DEBUG
+          ::AWS.config logger: logger
+        end
+      end
+
       def hl
-        @hl ||= HighLine.new
+        @hl ||= ::HighLine.new
       end
 
       [:red,:green,:yellow].each do |col|
