@@ -1,5 +1,6 @@
 require 'ec2ssh/command'
 require 'ec2ssh/ssh_config'
+require 'ec2ssh/exceptions'
 
 module Ec2ssh
   module Command
@@ -9,12 +10,9 @@ module Ec2ssh
       end
 
       def run
-        if ssh_config.mark_exist?
-          cli.red "Marker already exists on #{ssh_config_path}"
-        else
-          ssh_config.append_mark!
-          cli.green "Added mark to #{ssh_config_path}"
-        end
+        raise MarkAlreadyExists if ssh_config.mark_exist?
+        ssh_config.append_mark!
+        cli.green "Added mark to #{ssh_config_path}"
         #dotfile = Dotfile.update_or_create(options.dotfile, 'path' => config_path)
         cli.yellow "Please check and edit #{dotfile_path} before run `ec2ssh update`"
       end

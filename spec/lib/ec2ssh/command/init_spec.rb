@@ -18,21 +18,13 @@ describe Ec2ssh::Command::Init do
     before do
       expect(ssh_config).to receive(:mark_exist?).and_return(mark_exist)
       allow(command).to receive(:ssh_config).and_return(ssh_config)
-      command.run
     end
 
     context 'when the marker already exists' do
       let(:mark_exist) { true }
 
       it do
-        expect(cli).to have_received(:red).with('Marker already exists on /path/to/ssh/config')
-      end
-
-      it do
-        expect(cli).to have_received(:yellow).with('Please check and edit /path/to/dotfile before run `ec2ssh update`')
-      end
-
-      it do
+        expect { command.run }.to raise_error(Ec2ssh::MarkAlreadyExists)
         expect(ssh_config).to_not have_received(:append_mark!)
       end
 
@@ -45,10 +37,7 @@ describe Ec2ssh::Command::Init do
       let(:mark_exist) { false }
 
       it do
-        expect(cli).to have_received(:green).with('Added mark to /path/to/ssh/config')
-      end
-
-      it do
+        expect { command.run }.not_to raise_error
         expect(ssh_config).to have_received(:append_mark!).once
       end
     end

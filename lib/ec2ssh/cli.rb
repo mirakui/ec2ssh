@@ -12,6 +12,8 @@ module Ec2ssh
     desc "init", "Add ec2ssh mark to ssh_config"
     def init
       run_command :init
+    rescue MarkAlreadyExists
+      cli.red "Marker already exists on #{ssh_config_path}"
     end
 
     desc "update", "Update ec2 hosts list in ssh_config"
