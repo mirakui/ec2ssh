@@ -45,6 +45,9 @@ module Ec2ssh
         out.puts "regions #{regions}"
       end
 
+      out.puts
+      out.puts dotfile_str.gsub(/^/m, '# ')
+
       out.string
     end
   end

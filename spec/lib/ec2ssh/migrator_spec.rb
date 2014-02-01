@@ -32,6 +32,19 @@ aws_keys(
   key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
 )
 regions 'ap-northeast-1', 'us-east-1'
+
+# ---
+# path: /path/to/ssh/config
+# aws_keys:
+#   key1:
+#     access_key_id: ACCESS_KEY1
+#     secret_access_key: SECRET1
+#   key2:
+#     access_key_id: ACCESS_KEY2
+#     secret_access_key: SECRET2
+# regions:
+# - ap-northeast-1
+# - us-east-1
     END
   end
 end
