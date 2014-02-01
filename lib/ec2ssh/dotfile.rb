@@ -1,7 +1,7 @@
+require 'ec2ssh/exceptions'
 require 'yaml'
 
 module Ec2ssh
-  class AwsKeyNotFound < StandardError; end
   class Dotfile
     def initialize(config={})
       @config = {

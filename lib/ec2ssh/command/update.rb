@@ -12,22 +12,26 @@ module Ec2ssh
       end
 
       def run
-        config = SshConfig.new(ssh_config_path, cli.options.aws_key)
-        unless config.mark_exist?
-          red "Marker not found on #{ssh_config_path}"
-          red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
-          return
-        end
+        ssh_config = SshConfig.new(ssh_config_path, cli.options.aws_key)
+        raise MarkNotFound unless ssh_config.mark_exist?
 
-        config.parse!
-        result = builder.result
-        config_str = config.wrap result
-        config.replace! config_str
-        cli.yellow config_str
+        update! ssh_config
+
         #cli.green "Updated #{hosts.size} hosts on #{config_path}"
-        cli.green "Updated #{config_path}"
-      rescue AwsEnvNotDefined, AwsKeyNotFound
+        cli.green "Updated #{ssh_config_path}"
+      rescue AwsKeyNotFound
         cli.red "Set aws keys at #{options.dotfile}"
+      rescue MarkNotFound
+        red "Marker not found on #{ssh_config_path}"
+        red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
+      end
+
+      def update!(ssh_config)
+        ssh_config.parse!
+        lines = builder.build_host_lines
+        ssh_config_str = ssh_config.wrap lines
+        ssh_config.replace! ssh_config_str
+        cli.yellow ssh_config_str
       end
 
       def builder

@@ -5,23 +5,33 @@ module Ec2ssh
     attr_reader :ec2s, :aws_keys
 
     def initialize(aws_keys, regions)
-      AWS.start_memoizing
       @aws_keys = aws_keys
       @regions = regions
-      @ec2s = {}
+    end
+
+    def make_ec2s
+      AWS.start_memoizing
+      _ec2s = {}
       aws_keys.each do |key|
         key_name = aws_keys[:key_name] || aws_keys[:access_key_id]
-        @ec2s[key_name] = {}
+        _ec2s[key_name] = {}
         regions.each do |region|
           options = key.merge ec2_region: region
-          @ec2s[key_name][region] = AWS::EC2.new options
+          _ec2s[key_name][region] = AWS::EC2.new options
         end
       end
+      _ec2s
+    ensure
+      AWS.stop_memoizing
+    end
+
+    def ec2s
+      @ec2s ||= make_ec2s
     end
 
     def instances(key_name)
       @regions.map {|region|
-        @ec2s[key_name][region].instances.
+        ec2s[key_name][region].instances.
           filter('instance-state-name', 'running').
           to_a.
           sort_by {|ins| ins.tags['Name'] }

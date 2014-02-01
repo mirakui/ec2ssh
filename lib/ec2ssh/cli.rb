@@ -31,63 +31,15 @@ module Ec2ssh
     end
 
     no_tasks do
-      def hl
-        @hl ||= HighLine.new
-      end
-
-      def hosts
-        @hosts ||= Hosts.new(dotfile, options.aws_key).all
-      end
-
-      def dotfile
-        @dotfile ||= begin
-          if File.exist?(options.dotfile)
-            Dotfile.load(options.dotfile)
-          else
-            Dotfile.new
-          end
-        end
-      end
-
       def run_command(cmd)
         require "ec2ssh/command/#{cmd}"
         cls = eval "Ec2ssh::Command::#{cmd.capitalize}"
         cls.new(self).run
       end
 
-      def config_path
-        options.path || dotfile['path'] || "#{ENV['HOME']}/.ssh/config"
-      end
-
       [:red,:green,:yellow].each do |col|
         define_method(col) do |str|
           puts hl.color(str, col)
-        end
-      end
-
-      def merge_sections(config)
-        section_str = hosts.map { |h| <<-END }.join
-Host #{h[:host]}
-  HostName #{h[:dns_name]}
-        END
-        config.sections[options.aws_key] ||= SshConfig::Section.new(
-          options.aws_key,
-          section_str
-        )
-
-        sections = config.sections.values.map do |section|
-          if (
-              # section is matched
-              (section.name == options.aws_key) ||
-
-              # for backward compatibility
-              (config.sections.size == 1 && options.aws_key != 'default')
-          )
-            section.name = options.aws_key
-            section.replace!(section_str)
-          end
-
-          section.to_s
         end
       end
     end

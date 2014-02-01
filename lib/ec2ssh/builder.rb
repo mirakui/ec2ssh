@@ -11,7 +11,7 @@ module Ec2ssh
 
     def build_host_lines
       out = StringIO.new
-      ec2s.aws_keys.each do |name, key|
+      @container.aws_keys.each do |name, key|
         out.puts "# section: #{name}"
         ec2s.instances(name).each do |instance|
           bind = instance.instance_eval { binding }
