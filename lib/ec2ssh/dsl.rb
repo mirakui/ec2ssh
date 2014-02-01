@@ -45,7 +45,7 @@ module Ec2ssh
       end
 
       def self.parse_file(path)
-        raise DslFileNotFound unless File.exist?(path)
+        raise DotfileNotFound, path.to_s unless File.exist?(path)
         parse File.read(path)
       end
     end

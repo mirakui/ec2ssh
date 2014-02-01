@@ -41,6 +41,12 @@ module Ec2ssh
       red "Marker not found in #{command.ssh_config_path}"
     end
 
+    desc 'migrate', 'Migrate dotfile from old versions'
+    def migrate
+      command = make_command :migrate
+      command.run
+    end
+
     no_tasks do
       def make_command(cmd)
         require "ec2ssh/command/#{cmd}"
