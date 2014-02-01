@@ -21,6 +21,10 @@ RSpec.configure do |config|
     result
   end
 
+  def silence_stdout(&block)
+    capture(:stdout, &block)
+  end
+
   def tmp_dir
     @tmp_dir ||= begin
       Pathname('/fakefs/ec2ssh').tap do |path|
