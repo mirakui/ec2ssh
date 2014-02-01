@@ -43,7 +43,7 @@ module Ec2ssh
 
     no_tasks do
       def make_command(cmd)
-        require 'ec2ssh/command/#{cmd}'
+        require "ec2ssh/command/#{cmd}"
         cls = eval "Ec2ssh::Command::#{cmd.capitalize}"
         cls.new(self)
       end
