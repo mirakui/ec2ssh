@@ -11,4 +11,11 @@ describe Ec2ssh::CLI do
       cli.init
     end
   end
+
+  describe '#update' do
+    it do
+      expect(cli).to receive(:run_command).with(:update)
+      cli.update
+    end
+  end
 end

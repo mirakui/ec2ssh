@@ -16,21 +16,7 @@ module Ec2ssh
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option :aws_key, :banner => 'aws key name', :default => 'default'
     def update
-      config = SshConfig.new(config_path, options.aws_key)
-      unless config.mark_exist?
-        red "Marker not found on #{config_path}"
-        red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
-        return
-      end
-
-      config.parse!
-      sections = merge_sections(config)
-      config_str = config.wrap(sections.join("\n"))
-      config.replace! config_str
-      yellow config_str
-      green "Updated #{hosts.size} hosts on #{config_path}"
-    rescue AwsEnvNotDefined, AwsKeyNotFound
-      red "Set aws keys at #{options.dotfile}"
+      run_command :update
     end
 
     desc "remove", "Remove ec2ssh mark from ssh_config"
