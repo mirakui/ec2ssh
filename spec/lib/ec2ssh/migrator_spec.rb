@@ -32,6 +32,10 @@ aws_keys(
   key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
 )
 regions 'ap-northeast-1', 'us-east-1'
+host_lines <<EOS
+Host <%= tags['Name'] %>.<%= availability_zone %>
+  HostName <%= dns_name || private_ip_address %>
+EOS
 
 # ---
 # path: /path/to/ssh/config

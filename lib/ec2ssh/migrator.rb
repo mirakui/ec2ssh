@@ -45,6 +45,13 @@ module Ec2ssh
         out.puts "regions #{regions}"
       end
 
+      out.puts <<-END
+host_lines <<EOS
+Host <%= tags['Name'] %>.<%= availability_zone %>
+  HostName <%= dns_name || private_ip_address %>
+EOS
+      END
+
       out.puts
       out.puts dotfile_str.gsub(/^/m, '# ')
 
