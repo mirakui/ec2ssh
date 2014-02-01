@@ -10,11 +10,22 @@ module Ec2ssh
       end
 
       def run
-        raise MarkAlreadyExists if ssh_config.mark_exist?
-        ssh_config.append_mark!
-        cli.green "Added mark to #{ssh_config_path}"
+        init_dotfile
+        init_ssh_config
+      end
+
+      def init_dotfile
         #dotfile = Dotfile.update_or_create(options.dotfile, 'path' => config_path)
-        cli.yellow "Please check and edit #{dotfile_path} before run `ec2ssh update`"
+        #cli.yellow "Please check and edit #{dotfile_path} before run `ec2ssh update`"
+      end
+
+      def init_ssh_config
+        if ssh_config.mark_exist?
+          raise MarkAlreadyExists
+        else
+          ssh_config.append_mark!
+          cli.green "Added mark to #{ssh_config_path}"
+        end
       end
 
       def ssh_config

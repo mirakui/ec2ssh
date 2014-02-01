@@ -9,17 +9,21 @@ describe Ec2ssh::CLI do
     silence_stdout { example.run }
   end
 
+  before do
+    allow(cli).to receive(:make_command) do |cmd|
+      double(cmd, run: nil, ssh_config_path: nil, dotfile_path: nil)
+    end
+  end
+
   describe '#init' do
     it do
-      expect(cli).to receive(:run_command).with(:init)
-      cli.init
+      expect { cli.init }.not_to raise_error
     end
   end
 
   describe '#update' do
     it do
-      expect(cli).to receive(:run_command).with(:update)
-      cli.update
+      expect { cli.update }.not_to raise_error
     end
   end
 end

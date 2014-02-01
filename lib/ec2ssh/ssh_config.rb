@@ -9,7 +9,7 @@ module Ec2ssh
     attr_reader :path, :sections
 
     def initialize(path=nil, aws_key='default')
-      @path     = Pathname(path || "#{ENV['HOME']}/.ssh/config")
+      @path     = path || "#{ENV['HOME']}/.ssh/config"
       @aws_key  = aws_key
       @sections = {}
     end

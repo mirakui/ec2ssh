@@ -6,25 +6,27 @@ require 'ec2ssh/exceptions'
 
 module Ec2ssh
   class CLI < Thor
-    class_option :path, :banner => "/path/to/ssh_config"
-    class_option :dotfile, :banner => '$HOME/.ec2ssh', :default => "#{ENV['HOME']}/.ec2ssh"
+    class_option :path, banner: "/path/to/ssh_config"
+    class_option :dotfile, banner: '$HOME/.ec2ssh', default: "#{ENV['HOME']}/.ec2ssh"
 
     desc "init", "Add ec2ssh mark to ssh_config"
     def init
-      run_command :init
+      command = make_command :init
+      command.run
     rescue MarkAlreadyExists
-      cli.red "Marker already exists on #{ssh_config_path}"
+      red "Marker already exists in #{command.ssh_config_path}"
     end
 
     desc "update", "Update ec2 hosts list in ssh_config"
     method_option :aws_key, :banner => 'aws key name', :default => 'default'
     def update
-      run_command :update
-      green "Updated #{options.path}"
+      command = make_command :update
+      command.run
+      green "Updated #{command.ssh_config_path}"
     rescue AwsKeyNotFound
-      red "Set aws keys at #{options.dotfile}"
+      red "Set aws keys at #{command.dotfile_path}"
     rescue MarkNotFound
-      red "Marker not found in #{options.path}"
+      red "Marker not found in #{command.ssh_config_path}"
       red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
     end
 
@@ -40,10 +42,10 @@ module Ec2ssh
     end
 
     no_tasks do
-      def run_command(cmd)
+      def make_command(cmd)
         require "ec2ssh/command/#{cmd}"
         cls = eval "Ec2ssh::Command::#{cmd.capitalize}"
-        cls.new(self).run
+        cls.new(self)
       end
 
       def hl
