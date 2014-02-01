@@ -12,7 +12,7 @@ module Ec2ssh
       end
 
       def run
-        ssh_config = SshConfig.new(cli.options.path, cli.options.aws_key)
+        ssh_config = SshConfig.new(ssh_config_path)
         raise MarkNotFound unless ssh_config.mark_exist?
 
         ssh_config.parse!
