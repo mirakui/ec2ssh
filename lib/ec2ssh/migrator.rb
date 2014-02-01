@@ -10,14 +10,14 @@ module Ec2ssh
       str = File.read @dotfile_path
       begin
         hash = YAML.load str
-        return '2' if hash.keys.includes['aws_keys']
-      rescue
+        return '2' if hash.keys.include? 'aws_keys'
+      rescue Psych::SyntaxError
       end
 
       begin
         Dsl::Parser.parse str
         return '3'
-      rescue
+      rescue DotfileSyntaxError
       end
 
       raise InvalidDotfile
