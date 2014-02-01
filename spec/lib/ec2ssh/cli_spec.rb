@@ -26,4 +26,10 @@ describe Ec2ssh::CLI do
       expect { cli.update }.not_to raise_error
     end
   end
+
+  describe '#remove' do
+    it do
+      expect { cli.remove }.not_to raise_error
+    end
+  end
 end
