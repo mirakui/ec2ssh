@@ -2,14 +2,14 @@ require 'spec_helper'
 require 'ec2ssh/ssh_config'
 
 describe Ec2ssh::SshConfig do
-  let(:path) { tmp_dir.join('ssh_config') }
+  let(:path) { Pathname('/ssh_config') }
 
   subject(:ssh_config) do
     described_class.new(path).tap(&:parse!)
   end
 
   before do
-    path.open('w') {|f| f.write config_str }
+    File.open(path, 'w') {|f| f.write config_str }
   end
 
   context 'expect be false' do

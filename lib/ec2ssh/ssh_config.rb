@@ -35,7 +35,7 @@ module Ec2ssh
 
     def append_mark!
       replace! ""
-      open(@path, "a") do |f|
+      File.open(@path, "a") do |f|
         f.puts wrap("")
       end
     end
@@ -49,13 +49,13 @@ module Ec2ssh
     end
 
     def config_src
-      @config_src ||= open(@path, "r") do |f|
+      @config_src ||= File.open(@path, "r") do |f|
         f.read
       end
     end
 
     def save!(str)
-      open(@path, "w") do |f|
+      File.open(@path, "w") do |f|
         f.puts str
       end
     end

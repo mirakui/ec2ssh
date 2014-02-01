@@ -1,7 +1,7 @@
 require 'bundler/setup'
 Bundler.require
 
-require 'fakefs'
+require 'fakefs/spec_helpers'
 require 'webmock/rspec'
 require 'pathname'
 require 'stringio'
@@ -22,14 +22,14 @@ RSpec.configure do |config|
   end
 
   def tmp_dir
-    Pathname('/fakefs/ec2ssh')
+    @tmp_dir ||= begin
+      Pathname('/fakefs/ec2ssh').tap do |path|
+        FileUtils.mkdir_p path
+      end
+    end
   end
 
   alias :silence :capture
 
-  config.before(:all) do
-    unless tmp_dir.directory?
-      FileUtils.mkdir_p tmp_dir
-    end
-  end
+  config.include FakeFS::SpecHelpers
 end
