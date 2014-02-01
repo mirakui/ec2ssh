@@ -20,8 +20,6 @@ module Ec2ssh
         end
       end
       _ec2s
-    ensure
-      AWS.stop_memoizing
     end
 
     def ec2s
