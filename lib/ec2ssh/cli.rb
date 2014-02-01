@@ -10,7 +10,7 @@ module Ec2ssh
     class_option :dotfile, banner: '$HOME/.ec2ssh', default: "#{ENV['HOME']}/.ec2ssh"
     class_option :verbose, banner: 'enable debug log', default: false
 
-    desc "init", "Add ec2ssh mark to ssh_config"
+    desc 'init', 'Add ec2ssh mark to ssh_config'
     def init
       command = make_command :init
       command.run
@@ -18,8 +18,8 @@ module Ec2ssh
       red "Marker already exists in #{command.ssh_config_path}"
     end
 
-    desc "update", "Update ec2 hosts list in ssh_config"
-    method_option :aws_key, :banner => 'aws key name', :default => 'default'
+    desc 'update', 'Update ec2 hosts list in ssh_config'
+    method_option :aws_key, banner: 'aws key name', default: 'default'
     def update
       set_aws_logging
       command = make_command :update
@@ -32,7 +32,7 @@ module Ec2ssh
       red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
     end
 
-    desc "remove", "Remove ec2ssh mark from ssh_config"
+    desc 'remove', 'Remove ec2ssh mark from ssh_config'
     def remove
       command = make_command :remove
       command.run
@@ -43,7 +43,7 @@ module Ec2ssh
 
     no_tasks do
       def make_command(cmd)
-        require "ec2ssh/command/#{cmd}"
+        require 'ec2ssh/command/#{cmd}'
         cls = eval "Ec2ssh::Command::#{cmd.capitalize}"
         cls.new(self)
       end
