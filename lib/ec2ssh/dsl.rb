@@ -42,6 +42,8 @@ module Ec2ssh
         dsl = Dsl.new
         dsl.instance_eval dsl_str
         dsl._result
+      rescue SyntaxError => e
+        raise DotfileSyntaxError, e.to_s
       end
 
       def self.parse_file(path)

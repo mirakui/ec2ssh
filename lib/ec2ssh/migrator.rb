@@ -9,14 +9,14 @@ module Ec2ssh
     def check_version
       str = File.read @dotfile_path
       begin
-        YAML.load str
-        return 2
+        hash = YAML.load str
+        return '2' if hash.keys.includes['aws_keys']
       rescue
       end
 
       begin
         Dsl::Parser.parse str
-        return 3
+        return '3'
       rescue
       end
 
