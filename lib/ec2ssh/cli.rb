@@ -2,6 +2,7 @@ require 'thor'
 require 'highline'
 require 'ec2ssh/ssh_config'
 require 'ec2ssh/dotfile'
+require 'ec2ssh/exceptions'
 
 module Ec2ssh
   class CLI < Thor
@@ -17,6 +18,12 @@ module Ec2ssh
     method_option :aws_key, :banner => 'aws key name', :default => 'default'
     def update
       run_command :update
+      green "Updated #{options.path}"
+    rescue AwsKeyNotFound
+      red "Set aws keys at #{options.dotfile}"
+    rescue MarkNotFound
+      red "Marker not found in #{options.path}"
+      red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
     end
 
     desc "remove", "Remove ec2ssh mark from ssh_config"
@@ -35,6 +42,10 @@ module Ec2ssh
         require "ec2ssh/command/#{cmd}"
         cls = eval "Ec2ssh::Command::#{cmd.capitalize}"
         cls.new(self).run
+      end
+
+      def hl
+        @hl ||= HighLine.new
       end
 
       [:red,:green,:yellow].each do |col|

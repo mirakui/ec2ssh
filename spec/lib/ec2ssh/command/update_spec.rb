@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'ec2ssh/command/update'
+require 'ec2ssh/exceptions'
 
 describe Ec2ssh::Command::Update do
   describe '#run' do
@@ -25,10 +26,27 @@ describe Ec2ssh::Command::Update do
     before do
       File.open('/ssh_config', 'w') {|f| f.write ssh_config_str }
       File.open('/dotfile', 'w') {|f| f.write dotfile_str }
-      #expect(ssh_config).to receive(:mark_exist?).and_return(true)
     end
 
-    context 'without marked ssh_config' do
+    context 'with unmarked ssh_config' do
+      let(:ssh_config_str) { '' }
+      let(:dotfile_str) { <<-END }
+path '/dotfile'
+aws_keys(
+  default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
+)
+host_lines <<EOS
+Host <%= tags['Name'] %>
+  HostName <%= private_ip_address %>
+EOS
+      END
+
+      it do
+        expect { command.run }.to raise_error(Ec2ssh::MarkNotFound)
+      end
+    end
+
+    context 'with marked ssh_config' do
       let(:ssh_config_str) { <<-END }
 # before lines...
 
