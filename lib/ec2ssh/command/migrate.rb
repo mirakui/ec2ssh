@@ -29,10 +29,6 @@ module Ec2ssh
           cli.green 'Your dotfile is up-to-date.'
         end
       end
-
-      def dsl
-        @dsl ||= Ec2ssh::Dsl::Parser.parse File.read(dotfile_path)
-      end
     end
   end
 end
