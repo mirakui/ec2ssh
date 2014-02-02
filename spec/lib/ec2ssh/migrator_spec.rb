@@ -24,8 +24,7 @@ regions:
 - us-east-1
     END
 
-    it { expect(migrator.check_version).to eq('2') }
-    it { expect(migrator.migrate_from_2).to eq(<<-END) }
+    let(:new_dotfile_str) { <<-END }
 path '/path/to/ssh/config'
 aws_keys(
   key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
@@ -50,5 +49,8 @@ EOS
 # - ap-northeast-1
 # - us-east-1
     END
+
+    it { expect(migrator.check_version).to eq('2') }
+    it { expect(migrator.migrate_from_2).to eq(new_dotfile_str) }
   end
 end
