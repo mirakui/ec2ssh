@@ -47,7 +47,7 @@ path '/path/to/ssh/config'
 aws_keys(
   key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
 )
-host_lines <<EOS
+host_line <<EOS
 Host <%= tags['Name'] %>.<%= availability_zone %>
   HostName <%= dns_name || private_ip_address %>
 EOS
@@ -84,7 +84,7 @@ path '/path/to/ssh/config'
 aws_keys(
   key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
 )
-host_lines <<EOS
+host_line <<EOS
 Host <%= tags['Name'] %>.<%= availability_zone %>
   HostName <%= dns_name || private_ip_address %>
 EOS

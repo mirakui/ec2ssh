@@ -46,7 +46,7 @@ module Ec2ssh
       end
 
       out.puts <<-END
-host_lines <<EOS
+host_line <<EOS
 Host <%= tags['Name'] %>.<%= availability_zone %>
   HostName <%= dns_name || private_ip_address %>
 EOS

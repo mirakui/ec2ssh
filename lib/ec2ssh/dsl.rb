@@ -16,8 +16,8 @@ module Ec2ssh
       @_result.regions = regions
     end
 
-    def host_lines(erb)
-      @_result.host_lines = erb
+    def host_line(erb)
+      @_result.host_line = erb
     end
 
     def reject(&block)
@@ -31,7 +31,7 @@ module Ec2ssh
     class Container < Struct.new(*%i[
       aws_keys
       regions
-      host_lines
+      host_line
       reject
       path
     ])

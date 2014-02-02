@@ -35,7 +35,7 @@ path '/dotfile'
 aws_keys(
   default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
 )
-host_lines <<EOS
+host_line <<EOS
 Host <%= tags['Name'] %>
   HostName <%= private_ip_address %>
 EOS
@@ -61,7 +61,7 @@ path '/dotfile'
 aws_keys(
   default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
 )
-host_lines <<EOS
+host_line <<EOS
 Host <%= tags['Name'] %>
   HostName <%= private_ip_address %>
 EOS

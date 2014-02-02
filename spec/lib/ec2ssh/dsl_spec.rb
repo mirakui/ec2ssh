@@ -12,7 +12,7 @@ aws_keys(
   key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
 )
 regions 'ap-northeast-1', 'us-east-1'
-host_lines 'host lines'
+host_line 'host lines'
 reject {|instance| instance }
 path 'path'
 END
@@ -27,7 +27,7 @@ END
     }
   end
   its(:regions) { should == ['ap-northeast-1', 'us-east-1'] }
-  its(:host_lines) { should == 'host lines' }
+  its(:host_line) { should == 'host lines' }
   it { expect(result.reject.call(123)).to eq(123) }
   its(:path) { should == 'path' }
 end

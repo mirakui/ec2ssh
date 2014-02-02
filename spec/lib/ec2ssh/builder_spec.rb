@@ -10,7 +10,7 @@ describe Ec2ssh::Builder do
           key1: { access_key_id: 'KEY1', secret_access_key: 'SEC1' },
           key2: { access_key_id: 'KEY2', secret_access_key: 'SEC2' }
         }
-        c.host_lines = "Host <%= tags['Name'] %>"
+        c.host_line = "Host <%= tags['Name'] %>"
       end
     end
 
