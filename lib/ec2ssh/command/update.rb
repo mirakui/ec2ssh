@@ -3,6 +3,7 @@ require 'ec2ssh/command'
 require 'ec2ssh/ssh_config'
 require 'ec2ssh/builder'
 require 'ec2ssh/dsl'
+require 'ec2ssh/migrator'
 
 module Ec2ssh
   module Command
@@ -12,6 +13,11 @@ module Ec2ssh
       end
 
       def run
+        version = migrator.check_version
+        if version < '3'
+          raise ObsoleteDotfile, "version #{version} (dotfile_path)"
+        end
+
         ssh_config = SshConfig.new(ssh_config_path)
         raise MarkNotFound unless ssh_config.mark_exist?
 
@@ -28,6 +34,10 @@ module Ec2ssh
 
       def dsl
         @dsl ||= Ec2ssh::Dsl::Parser.parse File.read(dotfile_path)
+      end
+
+      def migrator
+        @migrator ||= Migrator.new dotfile_path
       end
     end
   end

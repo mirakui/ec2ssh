@@ -29,7 +29,10 @@ module Ec2ssh
       red "Set aws keys at #{command.dotfile_path}"
     rescue MarkNotFound
       red "Marker not found in #{command.ssh_config_path}"
-      red "Execute '#{$0} init --path=/path/to/ssh_config' first!"
+      red "Execute '#{$0} init' first!"
+    rescue ObsoleteDotfile
+      red "Your dotfile is obsolete: #{$!}"
+      red "Try '#{$0} migrate' to migrate to version 3"
     end
 
     desc 'remove', 'Remove ec2ssh mark from ssh_config'
