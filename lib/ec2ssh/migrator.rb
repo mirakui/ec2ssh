@@ -15,7 +15,7 @@ module Ec2ssh
     def check_version
       begin
         hash = YAML.load dotfile_str
-        return '2' if hash.keys.include? 'aws_keys'
+        return '2' if hash.is_a?(Hash) && hash.keys.include?('aws_keys')
       rescue Psych::SyntaxError
       end
 
@@ -56,6 +56,16 @@ EOS
       out.puts dotfile_str.gsub(/^/m, '# ')
 
       out.string
+    end
+
+    def replace!(new_dotfile_str)
+      File.open(@dotfile_path, 'w') {|f| f.write new_dotfile_str }
+    end
+
+    def backup!
+      backup_path = "#{@dotfile_path}.#{Time.now.strftime("%Y%m%d%H%M%S")}"
+      File.open(backup_path, 'w') {|f| f.write dotfile_str }
+      backup_path
     end
   end
 end
