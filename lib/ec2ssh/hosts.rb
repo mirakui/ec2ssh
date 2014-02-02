@@ -25,17 +25,32 @@ module Ec2ssh
 
     private
       def process_region(region)
-        instances(region).map {|instance|
+        hosts = name_tagged_instances(region).map {|instance|
           name_tag = instance[:tag_set].find {|tag| tag[:key] == 'Name' }
           next nil if name_tag.nil? || name_tag[:value].nil?
           name = name_tag[:value]
           dns_name = instance[:dns_name] or next nil
           {:host => "#{name}.#{region}", :dns_name => dns_name}
         }.compact.sort {|a,b| a[:host] <=> b[:host] }
+
+        if @dotfile['map_instance_id']
+          all_instances(region).map {|instance|
+            instance_id = instance[:instance_id] or next nil
+            dns_name = instance[:dns_name] or next nil
+            hosts << {:host => "#{instance_id}.#{region}", :dns_name => dns_name}
+          }
+        end
+
+        hosts
       end
 
-      def instances(region)
+      def name_tagged_instances(region)
         response = @ec2[region].instances.tagged('Name').filtered_request(:describe_instances)
+        response[:instance_index].values
+      end
+
+      def all_instances(region, &block)
+        response = @ec2[region].instances.filtered_request(:describe_instances)
         response[:instance_index].values
       end
   end
