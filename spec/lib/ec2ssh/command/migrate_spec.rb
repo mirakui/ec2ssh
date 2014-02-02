@@ -33,10 +33,6 @@ aws_keys:
     secret_access_key: SECRET1
       END
 
-      before do
-        allow(command).to receive(:check_version).and_return('2')
-      end
-
       context 'yes' do
         before do
           expect(cli).to receive(:yes?).and_return(true)
@@ -68,6 +64,38 @@ EOS
         it do
           expect(File.read('/dotfile.20140101000000')).to eq(dotfile_str)
         end
+      end
+
+      context 'no' do
+        before do
+          expect(cli).to receive(:yes?).and_return(false)
+          command.run
+        end
+
+        it do
+          expect(File.read('/dotfile')).to eq(dotfile_str)
+        end
+      end
+    end
+
+    context 'version 3' do
+      let(:dotfile_str) { <<-END }
+path '/path/to/ssh/config'
+aws_keys(
+  key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
+)
+host_lines <<EOS
+Host <%= tags['Name'] %>.<%= availability_zone %>
+  HostName <%= dns_name || private_ip_address %>
+EOS
+      END
+
+      before do
+        command.run
+      end
+
+      it do
+        expect(File.read('/dotfile')).to eq(dotfile_str)
       end
     end
   end
