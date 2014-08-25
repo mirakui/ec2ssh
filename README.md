@@ -178,6 +178,21 @@ ssh_options:
   - "TCPKeepAlive yes"
 ```
 
+## environment variables
+You can use environment variables as follows.
+
+```
+$ cat ~/.ec2ssh
+---
+path: /home/yourname/.ssh/config
+aws_keys:
+  default:
+    access_key_id: <%= ENV['AMAZON_ACCESS_KEY_ID'] %>
+    secret_access_key: <%= ENV['AMAZON_SECRET_ACCESS_KEY'] %>
+regions:
+  - ap-northeast-1
+```
+
 # How to upgrade from 1.x to 2.x
 If you have used ec2ssh-1.x, it seems that you may not have '~/.ec2ssh'.
 So you need execute `ec2ssh init` once to create `~/.ec2ssh`, and edit it as you like.

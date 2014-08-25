@@ -1,3 +1,4 @@
+require 'erb'
 require 'yaml'
 
 module Ec2ssh
@@ -17,7 +18,7 @@ module Ec2ssh
     end
 
     def self.load(path)
-      new YAML.load(open(path).read)
+      new YAML.load(ERB.new(open(path).read).result)
     end
 
     def save(path)
