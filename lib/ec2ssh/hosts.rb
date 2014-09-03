@@ -10,7 +10,7 @@ module Ec2ssh
         key = dotfile.aws_key(keyname)
         raise AwsEnvNotDefined if key['access_key_id'].nil? || key['secret_access_key'].nil?
         h[region] = AWS::EC2.new(
-          :ec2_endpoint      => "#{region}.ec2.amazonaws.com",
+          :ec2_endpoint      => "ec2.#{region}.amazonaws.com",
           :access_key_id     => key['access_key_id'],
           :secret_access_key => key['secret_access_key']
         )
