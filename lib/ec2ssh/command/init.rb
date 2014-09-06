@@ -34,10 +34,12 @@ aws_keys(
   # my_key1: { access_key_id: '...', secret_access_key: '...' }, ...
 )
 regions 'us-east-1'
-#reject {|instance| instance.tags['Name'] =~ /.../ }
+
+# You can use methods of AWS::EC2::Instance.
+# See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
 host_line <<END
 Host <%= tags['Name'] %>
-  HostName <%= private_ip_address %>
+  HostName <%= dns_name || private_ip_address %>
 END
         DOTFILE
 
