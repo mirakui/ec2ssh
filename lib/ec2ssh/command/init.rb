@@ -24,6 +24,13 @@ module Ec2ssh
           return
         end
 
+        write_dotfile_example
+
+        cli.green "Generated #{dotfile_path}"
+        cli.yellow "Please check and edit #{dotfile_path} before run `ec2ssh update`"
+      end
+
+      def write_dotfile_example
         example = <<-DOTFILE
 path '#{ENV['HOME']}/.ssh/config'
 aws_keys(
@@ -38,14 +45,12 @@ regions 'us-east-1'
 # You can use methods of AWS::EC2::Instance.
 # See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
 host_line <<END
-Host <%= tags['Name'] %>
+Host <%= tags['Name'] %>.<%= availability_zone %>
   HostName <%= dns_name || private_ip_address %>
 END
         DOTFILE
 
         File.open(dotfile_path, 'w') {|f| f.write example }
-        cli.green "Generated #{dotfile_path}"
-        cli.yellow "Please check and edit #{dotfile_path} before run `ec2ssh update`"
       end
 
       def init_ssh_config

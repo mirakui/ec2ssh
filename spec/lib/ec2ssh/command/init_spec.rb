@@ -27,10 +27,6 @@ describe Ec2ssh::Command::Init do
         expect { command.run }.to raise_error(Ec2ssh::MarkAlreadyExists)
         expect(ssh_config).to_not have_received(:append_mark!)
       end
-
-      #it do
-      #  expect(Ec2ssh::Dotfile).to have_received(:update_or_create).once
-      #end
     end
 
     context 'when the marker does not exists' do

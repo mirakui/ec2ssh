@@ -13,11 +13,6 @@ module Ec2ssh
       end
 
       def run
-        version = migrator.check_version
-        if version < '3'
-          raise ObsoleteDotfile, "version #{version} (dotfile_path)"
-        end
-
         ssh_config = SshConfig.new(ssh_config_path)
         raise MarkNotFound unless ssh_config.mark_exist?
 
