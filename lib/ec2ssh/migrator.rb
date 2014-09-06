@@ -46,6 +46,9 @@ module Ec2ssh
       end
 
       out.puts <<-END
+
+# You can use methods of AWS::EC2::Instance.
+# See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
 host_line <<EOS
 Host <%= tags['Name'] %>.<%= availability_zone %>
   HostName <%= dns_name || private_ip_address %>
