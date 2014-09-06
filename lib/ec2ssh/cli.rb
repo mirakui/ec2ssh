@@ -1,13 +1,11 @@
 require 'thor'
 require 'highline'
 require 'ec2ssh/ssh_config'
-require 'ec2ssh/dotfile'
 require 'ec2ssh/exceptions'
 require 'ec2ssh/migrator'
 
 module Ec2ssh
   class CLI < Thor
-    class_option :path, banner: "/path/to/ssh_config"
     class_option :dotfile, banner: '$HOME/.ec2ssh', default: "#{ENV['HOME']}/.ec2ssh"
     class_option :verbose, banner: 'enable debug log', default: false
 
