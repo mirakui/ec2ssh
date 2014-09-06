@@ -23,6 +23,7 @@ module Ec2ssh
     desc 'update', 'Update ec2 hosts list in ssh_config'
     method_option :aws_key, banner: 'aws key name', default: 'default'
     def update
+      check_dotfile_existence
       check_dotfile_version
       set_aws_logging
       command = make_command :update
@@ -37,6 +38,7 @@ module Ec2ssh
 
     desc 'remove', 'Remove ec2ssh mark from ssh_config'
     def remove
+      check_dotfile_existence
       check_dotfile_version
       command = make_command :remove
       command.run
@@ -58,6 +60,14 @@ module Ec2ssh
         if migrator.check_version < '3'
           red "#{options.dotfile} is old style."
           red "Try '#{$0} migrate' to migrate to version 3"
+          abort
+        end
+      end
+
+      def check_dotfile_existence
+        unless File.exist?(options.dotfile)
+          red "#{options.dotfile} doesn't exist."
+          red "Try '#{$0} init' to generate it or specify the path with --dotfile option"
           abort
         end
       end
