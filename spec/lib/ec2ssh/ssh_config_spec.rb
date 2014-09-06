@@ -18,7 +18,7 @@ Host host1
 HostName 0.0.0.0
 END
 
-    it { expect(ssh_config.mark_exist?).to be_false }
+    it { expect(ssh_config.mark_exist?).to be_falsey }
   end
 
   describe '#mark_exist?' do
@@ -34,7 +34,7 @@ Host db-01.ap-northeast-1
 ### EC2SSH END ###
 END
 
-      it { expect(ssh_config.mark_exist?).to be_true }
+      it { expect(ssh_config.mark_exist?).to be_truthy }
     end
   end
 
