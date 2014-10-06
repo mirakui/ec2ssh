@@ -26,13 +26,21 @@ $ ec2ssh init
 ```
 $ vi ~/.ec2ssh
 ---
-path: /path/to/ssh_config
-aws_keys:
-  default:
-    access_key_id: YOUR_ACCESS_KEY_ID
-    secret_access_key: YOUR_SECRET_ACCESS_KEY
-regions:
-  - ap-northeast-1
+aws_keys(
+  default: {
+    access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+    secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
+  },
+  # my_key1: { access_key_id: '...', secret_access_key: '...' }, ...
+)
+regions 'us-east-1'
+
+# You can use methods of AWS::EC2::Instance.
+# See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
+host_line <<END
+Host <%= tags['Name'] %>.<%= availability_zone %>
+  HostName <%= dns_name || private_ip_address %>
+END
 ```
 
 ### 5. Execute `ec2ssh update`
@@ -45,7 +53,7 @@ Then host-names of your instances are generated and wrote to .ssh/config
 ### 6. And you can ssh to your instances with your tagged name.
 
 ```
-$ ssh app-server-1.us-west-1
+$ ssh app-server-1.us-east-1a
 ```
 
 # Commands
@@ -57,27 +65,12 @@ $ ec2ssh remove       # Remove ec2ssh mark from ssh_config
 ```
 
 ## Options
-### --path
-Each command can use `--path` option to set ssh_config path. `~/.ssh/config` is default.
-
-```
-$ ec2ssh init --path /path/to/ssh_config
-```
-
 ### --dotfile
 Each command can use `--dotfile` option to set dotfile (.ec2ssh) path. `~/.ec2ssh` is default.
 
 ```
 $ ec2ssh init --dotfile /path/to/ssh_config
 ```
-
-### --aws-key
-`ec2ssh update` allows `--aws-key` option. If you have multiple aws keys, you can choose from them as you like using this option. See Dotfile section for details.
-
-```
-$ ec2ssh update --aws-key my_key1
-```
-
 
 # ssh_config and mark lines
 `ec2ssh init` command inserts mark lines your `.ssh/config` such as:
@@ -110,52 +103,6 @@ Host db-server-1.ap-southeast-1
 
 `ec2ssh remove` command removes the mark lines.
 
-# Dotfile (.ec2ssh)
-Dotfile (`.ec2ssh`) is a feature which is released at v2.0.0. A template of `.ec2ssh` is created when you execute `ec2ssh init`.
-
-```
-$ ec2ssh init
-$ cat ~/.ec2ssh
----
-path: /home/yourname/.ssh/config
-aws_keys:
-  default:
-    access_key_id: ...(Filled by ENV['AMAZON_ACCESS_KEY_ID']
-    secret_access_key: ...(Filled by ENV['AMAZON_SECRET_ACCESS_KEY'])
-regions:
-  - ap-northeast-1
-```
-
-## multiple aws keys
-You can use multiple aws keys at `ec2ssh update` with `--aws-key` option.
-
-```
-$ cat ~/.ec2ssh
----
-path: /home/yourname/.ssh/config
-aws_keys:
-  default:
-    access_key_id: ...
-    secret_access_key: ...
-  my_key1:
-    access_key_id: ...
-    secret_access_key: ...
-regions:
-  - ap-northeast-1
-```
-
-Updating ssh_config by 'default' aws key:
-
-```
-$ ec2ssh update
-```
-
-Updates ssh_config by 'my_key1' aws key:
-
-```
-$ ec2ssh update --aws-key my_key1
-```
-
 # How to upgrade from 1.x to 2.x
 If you have used ec2ssh-1.x, it seems that you may not have '~/.ec2ssh'.
 So you need execute `ec2ssh init` once to create `~/.ec2ssh`, and edit it as you like.
@@ -165,8 +112,19 @@ $ ec2ssh init
 $ vi ~/.ec2ssh
 ```
 
+# How to upgrade from 2.x to 3.x
+Dotfile (`.ec2ssh`) format has been changed from YAML to Ruby DSL.
+
+Don't panic and run `ec2ssh migrate` if you have ec2ssh-2.x styled dotfile.
+
+```
+$ ec2ssh migrate
+```
+
+This command converts your existing `.ec2ssh` file into 3.x style.
+
 # Notice
 `ec2ssh` command updates your `.ssh/config` file default. You should make a backup of it.
 
 # License
-ec2ssh is released under the MIT license.
+Copyright (c) 2014 Issei Naruta. ec2ssh is released under the MIT license.
