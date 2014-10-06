@@ -1,3 +1,3 @@
 module Ec2ssh
-  VERSION = '2.0.6'
+  VERSION = '3.0.0.beta1'
 end
