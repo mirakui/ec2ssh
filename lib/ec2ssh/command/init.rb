@@ -40,7 +40,9 @@ aws_keys(
   },
   # my_key1: { access_key_id: '...', secret_access_key: '...' }, ...
 )
-regions 'us-east-1'
+regions ENV['AWS_REGION'] || ENV['AMAZON_REGION'] || ENV['AWS_DEFAULT_REGION'] || 'us-east-1'
+# Enable regions as you like
+# regions *%w(ap-northeast-1 ap-southeast-1 ap-southeast-2 eu-west-1 sa-east-1 us-east-1 us-west-1 us-west-2)
 
 # You can use methods of AWS::EC2::Instance.
 # See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
