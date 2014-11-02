@@ -1,4 +1,9 @@
 # Change Log
+## 2.0.8
+
+* Update EC2 API endpoint (#16, #20)
+  Thanks to @a2ikm and @wnoguchi
+
 ## 2.0.7
 
 * Add ssh_options (#11)
