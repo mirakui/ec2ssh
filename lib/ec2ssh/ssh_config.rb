@@ -48,6 +48,10 @@ module Ec2ssh
     end
 
     def config_src
+      unless File.exist?(@path)
+        File.open(@path, "w", 0600).close()
+      end
+
       @config_src ||= File.open(@path, "r") do |f|
         f.read
       end
