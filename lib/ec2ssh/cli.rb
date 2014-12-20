@@ -51,6 +51,12 @@ module Ec2ssh
       command.run
     end
 
+    desc 'version', 'Show version'
+    def version
+      require 'ec2ssh/version'
+      puts "ec2ssh #{Ec2ssh::VERSION}"
+    end
+
     no_tasks do
       def check_dotfile_version
         return unless File.exist?(options.dotfile)
