@@ -1,4 +1,8 @@
 # Change Log
+## 3.0.0
+* Dotfile (.ec2ssh) format has been changed from YAML to Ruby DSL.
+* Refactored
+
 ## 2.0.7
 
 * Add ssh_options (#11)
