@@ -31,6 +31,7 @@ module Ec2ssh
         ec2s[key_name][region].instances.
           filter('instance-state-name', 'running').
           to_a.
+          select {|ins| ins.tags['Name'] }.
           sort_by {|ins| ins.tags['Name'] }
       }.flatten
     end
