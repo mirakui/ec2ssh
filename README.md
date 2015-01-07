@@ -35,6 +35,9 @@ aws_keys(
 )
 regions 'us-east-1'
 
+# Ignore unnamed instances
+reject {|instance| !instance.tags['Name'] }
+
 # You can use methods of AWS::EC2::Instance.
 # See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
 host_line <<END

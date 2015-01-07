@@ -48,6 +48,9 @@ aws_keys(
   key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
 )
 
+# Ignore unnamed instances
+reject {|instance| !instance.tags['Name'] }
+
 # You can use methods of AWS::EC2::Instance.
 # See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
 host_line <<EOS
