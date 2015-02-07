@@ -35,6 +35,9 @@ aws_keys(
 )
 regions 'us-east-1'
 
+# Ignore unnamed instances
+reject {|instance| !instance.tags['Name'] }
+
 # You can use methods of AWS::EC2::Instance.
 # See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
 host_line <<END
@@ -125,6 +128,9 @@ This command converts your existing `.ec2ssh` file into 3.x style.
 
 # Notice
 `ec2ssh` command updates your `.ssh/config` file default. You should make a backup of it.
+
+# Zsh completion support
+Use `zsh/_ec2ssh`.
 
 # License
 Copyright (c) 2014 Issei Naruta. ec2ssh is released under the MIT license.

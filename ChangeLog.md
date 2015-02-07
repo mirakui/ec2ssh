@@ -1,4 +1,16 @@
 # Change Log
+## 3.0.2
+* Add zsh completion file (#26)
+  Thanks to @hayamiz
+
+## 3.0.1
+* Ignore unnamed instances as default (#22, #24, #25)
+  Thanks to @r7kamura and @kainoku
+
+## 3.0.0
+* Dotfile (.ec2ssh) format has been changed from YAML to Ruby DSL.
+* Refactored
+
 ## 2.0.7
 
 * Add ssh_options (#11)
