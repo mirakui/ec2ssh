@@ -1,4 +1,8 @@
 # Change Log
+## 3.0.2
+* Add zsh completion file (#26)
+  Thanks to @hayamiz
+
 ## 3.0.1
 * Ignore unnamed instances as default (#22, #24, #25)
   Thanks to @r7kamura and @kainoku
