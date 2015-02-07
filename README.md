@@ -129,5 +129,8 @@ This command converts your existing `.ec2ssh` file into 3.x style.
 # Notice
 `ec2ssh` command updates your `.ssh/config` file default. You should make a backup of it.
 
+# Zsh completion support
+Use `zsh/_ec2ssh`.
+
 # License
 Copyright (c) 2014 Issei Naruta. ec2ssh is released under the MIT license.
