@@ -51,6 +51,38 @@ module Ec2ssh
       command.run
     end
 
+    desc 'shellcomp [-]', 'Initialize shell completion for bash/zsh'
+    def shellcomp(_ = false)
+      if args.include?("-")
+        print_rc = true
+      else
+        print_rc = false
+      end
+
+      # print instructions for automatically enabling shell completion
+      unless print_rc
+        puts <<EOS
+# Enable ec2ssh completion by adding
+# the following to .bash_profile/.zshrc
+
+type ec2ssh >/dev/null 2>&1 && eval "$(ec2ssh shellcomp -)"
+
+EOS
+        exit(false)
+      end
+
+      # print shell script for enabling shell completion
+      zsh_comp_file = File.expand_path("../../../zsh/_ec2ssh", __FILE__)
+      bash_comp_file = File.expand_path("../../../bash/ec2ssh.bash", __FILE__)
+      puts <<EOS
+if [ -n "${BASH_VERSION:-}" ]; then
+    source #{bash_comp_file}
+elif [ -n "${ZSH_VERSION:-}" ]; then
+    source #{zsh_comp_file}
+fi
+EOS
+    end
+
     desc 'version', 'Show version'
     def version
       require 'ec2ssh/version'
