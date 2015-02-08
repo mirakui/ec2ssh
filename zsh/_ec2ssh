@@ -67,8 +67,15 @@ _ec2ssh-help() {
 
 
 __ec2ssh_aws_keys() {
-    local keys
-    keys=$(ruby -r ec2ssh/dsl -e 'puts Ec2ssh::Dsl::Parser.parse_file(File.expand_path(".ec2ssh", "~")).aws_keys.keys' 2> /dev/null)
+    local keys dotfile
+
+    if (( ind = ${words[(I)--dotfile]} )) && [ -f "${~words[ind+1]}" ]; then
+        dotfile=${~words[ind+1]}
+    else
+        dotfile="$HOME/.ec2ssh"
+    fi
+
+    keys=$(echo "$dotfile" | ruby -r ec2ssh/dsl -e 'puts Ec2ssh::Dsl::Parser.parse_file(STDIN.read.strip).aws_keys.keys' 2> /dev/null)
     _values 'aws key name' $(echo $keys)
 }
 
