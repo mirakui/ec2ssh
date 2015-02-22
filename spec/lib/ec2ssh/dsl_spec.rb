@@ -4,10 +4,7 @@ require 'ec2ssh/dsl'
 describe Ec2ssh::Dsl do
   let(:dsl_str) do
 <<-END
-aws_keys(
-  key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
-  key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
-)
+profiles 'default', 'myprofile'
 regions 'ap-northeast-1', 'us-east-1'
 host_line 'host lines'
 reject {|instance| instance }
@@ -17,12 +14,7 @@ END
 
   subject(:result) { Ec2ssh::Dsl::Parser.parse dsl_str }
 
-  its(:aws_keys) do
-    should == {
-      key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
-      key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
-    }
-  end
+  its(:profiles) { should == ['default', 'myprofile'] }
   its(:regions) { should == ['ap-northeast-1', 'us-east-1'] }
   its(:host_line) { should == 'host lines' }
   it { expect(result.reject.call(123)).to eq(123) }

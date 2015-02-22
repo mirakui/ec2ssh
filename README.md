@@ -9,30 +9,39 @@ ec2ssh is a ssh_config manager for Amazon EC2.
 ### 1. Set 'Name' tag to your instances
 eg. Tag 'app-server-1' as 'Name' to an instance i-xxxxx in us-west-1 region.
 
-### 2. Install ec2ssh
+### 2. Write ~/.aws/credentials
+```
+# ~/.aws/credentials
+
+[default]
+aws_access_key_id=...
+aws_secret_access_key=...
+
+[myprofile]
+aws_access_key_id=...
+aws_secret_access_key=...
+```
+
+If you need more details about `~/.aws/credentials`, check [A New and Standardized Way to Manage Credentials in the AWS SDKs](http://blogs.aws.amazon.com/security/post/Tx3D6U6WSFGOK2H/A-New-and-Standardized-Way-to-Manage-Credentials-in-the-AWS-SDKs)
+
+### 3. Install ec2ssh
 
 ```
 $ gem install ec2ssh
 ```
 
-### 3. Execute `ec2ssh init`
+### 4. Execute `ec2ssh init`
 
 ```
 $ ec2ssh init
 ```
 
-### 4. Edit `.ec2ssh`
+### 5. Edit `.ec2ssh`
 
 ```
 $ vi ~/.ec2ssh
 ---
-aws_keys(
-  default: {
-    access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-    secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-  },
-  # my_key1: { access_key_id: '...', secret_access_key: '...' }, ...
-)
+profiles 'default', 'myprofile'
 regions 'us-east-1'
 
 # Ignore unnamed instances
@@ -46,14 +55,14 @@ Host <%= tags['Name'] %>.<%= availability_zone %>
 END
 ```
 
-### 5. Execute `ec2ssh update`
+### 6. Execute `ec2ssh update`
 
 ```
 $ ec2ssh update
 ```
 Then host-names of your instances are generated and wrote to .ssh/config
 
-### 6. And you can ssh to your instances with your tagged name.
+### 7. And you can ssh to your instances with your tagged name.
 
 ```
 $ ssh app-server-1.us-east-1a
