@@ -2,9 +2,6 @@ require 'spec_helper'
 require 'ec2ssh/dsl'
 
 describe Ec2ssh::Dsl do
-  shared_examples 'a filled dsl container' do
-  end
-
   let(:dsl_str) do
 <<-END
 aws_keys(

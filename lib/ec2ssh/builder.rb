@@ -6,7 +6,9 @@ module Ec2ssh
   class Builder
     def initialize(container)
       @container = container
-      @host_lines_erb = ERB.new @container.host_line
+      safe_level = nil
+      erb_trim_mode = '%-'
+      @host_lines_erb = ERB.new @container.host_line, safe_level, erb_trim_mode
     end
 
     def build_host_lines
@@ -16,10 +18,11 @@ module Ec2ssh
         ec2s.instances(name).each do |instance|
           bind = instance.instance_eval { binding }
           next if @container.reject && @container.reject.call(instance)
-          out.puts @host_lines_erb.result(bind)
+          line = @host_lines_erb.result(bind).rstrip
+          out.puts line unless line.empty?
         end
       end
-      out.string
+      out.string.rstrip
     end
 
     def ec2s
