@@ -1,4 +1,9 @@
 # Change Log
+## 3.0.3
+* Use "%-" for ERB's trim\_mode at `host\_line` in dotfile (#29)
+* Add 'shellcomp' command: loading completion functions easily in bash/zsh (#27)
+  Thanks to @hayamiz
+
 ## 3.0.2
 * Add zsh completion file (#26)
   Thanks to @hayamiz
