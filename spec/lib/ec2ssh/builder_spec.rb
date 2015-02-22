@@ -38,7 +38,7 @@ describe Ec2ssh::Builder do
     end
 
     it do
-      expect(builder.build_host_lines).to eq <<-END
+      expect(builder.build_host_lines).to eq <<-END.rstrip
 # section: key1
 Host srv1
 Host srv2
@@ -54,12 +54,34 @@ Host srv4
       end
 
       it do
-        expect(builder.build_host_lines).to eq <<-END
+        expect(builder.build_host_lines).to eq <<-END.rstrip
 # section: key1
 Host srv2
 # section: key2
 Host srv3
 Host srv4
+        END
+      end
+    end
+
+    context 'checking erb trim_mode' do
+      before do
+        container.host_line = <<-END
+% if tags['Name']
+  <%- if tags['Name'] == 'srv3' -%>
+Host <%= tags['Name'] %>
+  HostName <%= tags['Name'] %>
+  <%- end -%>
+% end
+        END
+      end
+
+      it do
+        expect(builder.build_host_lines).to eq <<-END.rstrip
+# section: key1
+# section: key2
+Host srv3
+  HostName srv3
         END
       end
     end

@@ -86,7 +86,6 @@ Host srv1
   HostName 10.0.0.1
 Host srv2
   HostName 10.0.0.2
-
 ### EC2SSH END ###
 
 # after lines...
