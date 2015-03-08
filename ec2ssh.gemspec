@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/mirakui/ec2ssh"
   s.summary     = %q{A ssh_config manager for AWS EC2}
   s.description = %q{ec2ssh is a ssh_config manager for AWS EC2}
+  s.required_ruby_version = ">= 2.0.0"
 
   s.rubyforge_project = "ec2ssh"
   s.add_dependency "thor", "~> 0.14"
