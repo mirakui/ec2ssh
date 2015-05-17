@@ -51,4 +51,24 @@ END
     it { expect(result.reject.call(123)).to eq(123) }
     its(:path) { should == 'path' }
   end
+
+  context 'with profiles and aws_keys both' do
+    let(:dsl_str) do
+<<-END
+aws_keys(
+  key1: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' },
+  key2: { access_key_id: 'ACCESS_KEY2', secret_access_key: 'SECRET2' }
+)
+profiles 'default', 'myprofile'
+regions 'ap-northeast-1', 'us-east-1'
+host_line 'host lines'
+reject {|instance| instance }
+path 'path'
+END
+    end
+
+    it do
+      expect { Ec2ssh::Dsl::Parser.parse dsl_str }.to raise_error Ec2ssh::DotfileValidationError
+    end
+  end
 end

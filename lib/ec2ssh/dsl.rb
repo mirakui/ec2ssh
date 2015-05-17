@@ -46,7 +46,7 @@ module Ec2ssh
       def self.parse(dsl_str)
         dsl = Dsl.new
         dsl.instance_eval dsl_str
-        dsl._result
+        dsl._result.tap {|result| validate result }
       rescue SyntaxError => e
         raise DotfileSyntaxError, e.to_s
       end
@@ -54,6 +54,12 @@ module Ec2ssh
       def self.parse_file(path)
         raise DotfileNotFound, path.to_s unless File.exist?(path)
         parse File.read(path)
+      end
+
+      def self.validate(result)
+        if result.aws_keys && result.profiles
+          raise DotfileValidationError, "`aws_keys` and `profiles` doesn't work together in dotfile."
+        end
       end
     end
   end
