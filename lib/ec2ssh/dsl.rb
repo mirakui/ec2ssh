@@ -9,7 +9,6 @@ module Ec2ssh
     end
 
     def aws_keys(keys)
-      $stderr.puts '[WARNING] `aws_keys` in .ec2ssh is deprecated. Use `profiles` instead to read `~/.aws/credentials`'
       @_result.aws_keys = keys
     end
 

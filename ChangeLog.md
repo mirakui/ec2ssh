@@ -1,6 +1,6 @@
 # Change Log
 ## 3.1.0
-* Use credentials from `~/.aws/credentials` as default. Credential profiles are set as `profiles` in dotfile. `aws_keys` is deprecated.
+* Use credentials from `~/.aws/credentials` as default. Credential profiles are set as `profiles` in dotfile.
 
 ## 3.0.3
 * Use "%-" for ERB's trim\_mode at `host\_line` in dotfile (#29)
