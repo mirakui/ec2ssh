@@ -19,7 +19,6 @@ module Ec2ssh
     end
 
     desc 'update', 'Update ec2 hosts list in ssh_config'
-    method_option :aws_key, banner: 'aws key name', default: 'default'
     def update
       check_dotfile_existence
       check_dotfile_version

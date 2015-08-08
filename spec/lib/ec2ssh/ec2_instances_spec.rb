@@ -12,7 +12,7 @@ describe Ec2ssh::Ec2Instances do
     }
 
     let(:mock) do
-      described_class.new(aws_keys='', regions=[region]).tap do |e|
+      described_class.new(profiles='', regions=[region]).tap do |e|
         allow(e).to receive(:ec2s) { ec2s }
         allow(e).to receive(:regions) { [region] }
       end

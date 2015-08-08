@@ -1,4 +1,4 @@
-require 'aws-sdk'
+require 'aws-sdk-v1'
 
 module Ec2ssh
   class Ec2Instances
@@ -33,6 +33,11 @@ module Ec2ssh
           to_a.
           sort_by {|ins| ins.tags['Name'].to_s }
       }.flatten
+    end
+
+    def self.expand_profile_name_to_credential(profile_name)
+      provider = AWS::Core::CredentialProviders::SharedCredentialFileProvider.new(profile_name: profile_name)
+      provider.credentials
     end
   end
 end
