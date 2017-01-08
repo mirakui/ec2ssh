@@ -2,11 +2,11 @@ require 'aws-sdk'
 
 module Ec2ssh
   class Ec2Instances
-    attr_reader :ec2s, :aws_keys
+    attr_reader :ec2s
 
-    def initialize(aws_keys, regions)
-      @aws_keys = aws_keys
+    def initialize(regions, profiles)
       @regions = regions
+      @profiles = profiles
     end
 
     def make_ec2s

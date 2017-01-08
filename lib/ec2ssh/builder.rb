@@ -26,7 +26,7 @@ module Ec2ssh
     end
 
     def ec2s
-      @ec2s ||= Ec2Instances.new aws_keys, @container.regions
+      @ec2s ||= Ec2Instances.new @container.regions, @container.profiles
     end
 
     def aws_keys

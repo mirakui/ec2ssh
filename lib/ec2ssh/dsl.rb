@@ -33,7 +33,6 @@ module Ec2ssh
     end
 
     class Container < Struct.new(*%i[
-      aws_keys
       profiles
       regions
       host_line
