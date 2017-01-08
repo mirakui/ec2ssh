@@ -56,9 +56,6 @@ module Ec2ssh
       end
 
       def self.validate(result)
-        if result.aws_keys && result.profiles
-          raise DotfileValidationError, "`aws_keys` and `profiles` doesn't work together in dotfile."
-        end
       end
     end
   end
