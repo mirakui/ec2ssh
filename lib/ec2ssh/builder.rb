@@ -13,9 +13,9 @@ module Ec2ssh
 
     def build_host_lines
       out = StringIO.new
-      aws_keys.each do |name, key|
-        out.puts "# section: #{name}"
-        ec2s.instances(name).each do |instance|
+      @container.profiles.each do |profile|
+        out.puts "# section: #{profile}"
+        ec2s.instances(profile).each do |instance|
           bind = instance.instance_eval { binding }
           next if @container.reject && @container.reject.call(instance)
           line = @host_lines_erb.result(bind).rstrip

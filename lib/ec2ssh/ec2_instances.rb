@@ -10,13 +10,13 @@ module Ec2ssh
     end
 
     def make_ec2s
-      AWS.start_memoizing
       _ec2s = {}
-      aws_keys.each do |name, key|
-        _ec2s[name] = {}
+      @profiles.each do |profile|
+        options = { profile: profile }
+        _ec2s[profile] = {}
         @regions.each do |region|
-          options = key.merge ec2_region: region
-          _ec2s[name][region] = AWS::EC2.new options
+          options.merge! region: region
+          _ec2s[profile][region] = Aws::EC2::Resource.new options
         end
       end
       _ec2s
@@ -26,12 +26,19 @@ module Ec2ssh
       @ec2s ||= make_ec2s
     end
 
-    def instances(key_name)
+    def instances(profile)
       @regions.map {|region|
-        ec2s[key_name][region].instances.
-          filter('instance-state-name', 'running').
+        ec2s[profile][region].instances(
+          filters: [{
+            name:   'instance-state-name',
+            values:  %w(running)
+          }]).
           to_a.
-          sort_by {|ins| ins.tags['Name'].to_s }
+          sort_by do |ins|
+            ins.tags.find_all do |tag|
+              tag.key == 'Name'
+            end.to_s
+          end
       }.flatten
     end
 
