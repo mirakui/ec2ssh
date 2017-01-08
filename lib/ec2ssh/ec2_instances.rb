@@ -1,4 +1,4 @@
-require 'aws-sdk-v1'
+require 'aws-sdk'
 
 module Ec2ssh
   class Ec2Instances
