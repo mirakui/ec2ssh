@@ -42,9 +42,5 @@ module Ec2ssh
       }.flatten
     end
 
-    def self.expand_profile_name_to_credential(profile_name)
-      provider = AWS::Core::CredentialProviders::SharedCredentialFileProvider.new(profile_name: profile_name)
-      provider.credentials
-    end
   end
 end
