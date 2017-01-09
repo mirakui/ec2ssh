@@ -27,19 +27,21 @@ module Ec2ssh
     end
 
     def instances(profile)
-      @regions.map {|region|
+      fetch_instances(profile).sort_by do |ins|
+        ins.tags.find_all do |tag|
+          tag.key == 'Name'
+        end.to_s
+      end
+    end
+
+    def fetch_instances(profile)
+      @regions.map do |region|
         ec2s[profile][region].instances(
           filters: [{
             name:   'instance-state-name',
             values:  %w(running)
-          }]).
-          to_a.
-          sort_by do |ins|
-            ins.tags.find_all do |tag|
-              tag.key == 'Name'
-            end.to_s
-          end
-      }.flatten
+        }]).to_a
+      end.flatten
     end
 
   end
