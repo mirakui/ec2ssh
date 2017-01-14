@@ -14,7 +14,7 @@ module Ec2ssh
       end
 
       def ssh_config_path
-        cli.options.path || dotfile.path || "#{$ENV['HOME']}/.ssh/config"
+        cli.options.path || dotfile.path || "#{ENV['HOME']}/.ssh/config"
       end
 
       def dotfile_path
