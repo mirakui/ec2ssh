@@ -57,6 +57,10 @@ module Ec2ssh
       end
 
       def self.validate(result)
+        if result.aws_keys
+          warn "`aws_keys` option is remove in next release. please use `profiles`"
+        end
+
         if result.aws_keys && result.profiles
           raise DotfileValidationError, "`aws_keys` and `profiles` doesn't work together in dotfile."
         end
