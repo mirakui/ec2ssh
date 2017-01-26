@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 gemspec
 
+if Gem::Version.create(RUBY_VERSION) < Gem::Version.create('2.2.0')
+  gem "listen", "2.10.1"
+end
 gem 'rspec', '~> 3.0'
 gem 'rspec-its', '~> 1.0'
 gem 'guard-rspec', '~> 4.3'

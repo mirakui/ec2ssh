@@ -6,11 +6,8 @@ describe Ec2ssh::Builder do
   describe '#build_host_lines' do
     let(:container) do
       Ec2ssh::Dsl::Container.new.tap do |c|
-        c.aws_keys = {
-          key1: { access_key_id: 'KEY1', secret_access_key: 'SEC1' },
-          key2: { access_key_id: 'KEY2', secret_access_key: 'SEC2' }
-        }
-        c.host_line = "Host <%= tags['Name'] %>"
+        c.host_line = "Host <%= tags.find{|t| t.key == 'Name' }.value %>"
+        c.profiles = %w(key1 key2)
       end
     end
 
@@ -21,19 +18,21 @@ describe Ec2ssh::Builder do
     end
 
     let(:ec2s) do
-      double('ec2s', aws_keys: container.aws_keys).tap do |dbl|
-        allow(dbl).to receive(:instances) {|name| instances[name] }
+      double('ec2s').tap do |dbl|
+        allow(dbl).to receive(:instances) {|profile| instances[profile] }
       end
     end
 
     let(:instances) do
       {
-        key1: [
-          double('instance', tags: {'Name' => 'srv1'}),
-          double('instance', tags: {'Name' => 'srv2'})],
-        key2: [
-          double('instance', tags: {'Name' => 'srv3'}),
-          double('instance', tags: {'Name' => 'srv4'})]
+        'key1' => [
+          double('instance', tags: [double('tag', key: 'Name', value: 'srv1')]),
+          double('instance', tags: [double('tag', key: 'Name', value: 'srv2')])
+        ],
+        'key2' => [
+          double('instance', tags: [double('tag', key: 'Name', value: 'srv3')]),
+          double('instance', tags: [double('tag', key: 'Name', value: 'srv4')])
+        ]
       }
     end
 
@@ -50,7 +49,7 @@ Host srv4
 
     context 'with #reject' do
       before do
-        container.reject = lambda {|ins| ins.tags['Name'] == 'srv1' }
+        container.reject = lambda {|ins| ins.tags.find{|t| t.key == 'Name' }.value == 'srv1' }
       end
 
       it do
@@ -67,10 +66,10 @@ Host srv4
     context 'checking erb trim_mode' do
       before do
         container.host_line = <<-END
-% if tags['Name']
-  <%- if tags['Name'] == 'srv3' -%>
-Host <%= tags['Name'] %>
-  HostName <%= tags['Name'] %>
+% if tags.find{|t| t.key == 'Name' }.value
+  <%- if tags.find{|t| t.key == 'Name' }.value == 'srv3' -%>
+Host <%= tags.find{|t| t.key == 'Name' }.value %>
+  HostName <%= tags.find{|t| t.key == 'Name' }.value %>
   <%- end -%>
 % end
         END

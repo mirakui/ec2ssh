@@ -7,7 +7,7 @@ describe Ec2ssh::Command::Update do
     let(:command) do
       described_class.new(cli).tap do |cmd|
         allow(cmd).to receive(:options).and_return(options)
-        allow(cmd.builder.ec2s).to receive(:instances) { instances }
+        allow(cmd.builder.ec2s).to receive(:instances) {|profile| instances[profile] }
       end
     end
     let(:options) do
@@ -17,10 +17,12 @@ describe Ec2ssh::Command::Update do
       double(:cli, options: options, red: nil, yellow: nil, green: nil)
     end
     let(:instances) do
-      [
-        double('instance', tags: {'Name' => 'srv1'}, private_ip_address: '10.0.0.1'),
-        double('instance', tags: {'Name' => 'srv2'}, private_ip_address: '10.0.0.2')
-      ]
+      {
+        'default' => [
+          double('instance', tags: [double('tag', key: 'Name', value: 'srv1')], private_ip_address: '10.0.0.1'),
+          double('instance', tags: [double('tag', key: 'Name', value: 'srv2')], private_ip_address: '10.0.0.2')
+        ]
+      }
     end
 
     before do
@@ -35,6 +37,7 @@ path '/dotfile'
 aws_keys(
   default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
 )
+profiles 'default'
 host_line <<EOS
 Host <%= tags['Name'] %>
   HostName <%= private_ip_address %>
@@ -61,8 +64,9 @@ path '/dotfile'
 aws_keys(
   default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
 )
+profiles 'default'
 host_line <<EOS
-Host <%= tags['Name'] %>
+Host <%= tags.find{|t| t.key == 'Name' }.value %>
   HostName <%= private_ip_address %>
 EOS
       END

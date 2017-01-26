@@ -44,14 +44,14 @@ $ vi ~/.ec2ssh
 profiles 'default', 'myprofile'
 regions 'us-east-1'
 
-# Ignore unnamed instances
-reject {|instance| !instance.tags['Name'] }
+# Ignore instances
+reject {|instance| instance.tags.find{|t| t.key == 'Name' }.value == 'outdated-instance' }
 
-# You can use methods of AWS::EC2::Instance.
-# See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
+# You can use methods of Aws::EC2::Instance.
+# See http://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Instance.html
 host_line <<END
-Host <%= tags['Name'] %>.<%= availability_zone %>
-  HostName <%= dns_name || private_ip_address %>
+Host <%= tags.find{|t| t.key == 'Name' }.value %>.<%= placement.availability_zone %>
+  HostName <%= public_dns_name.empty? private_ip_address : public_dns_name %>
 END
 ```
 
