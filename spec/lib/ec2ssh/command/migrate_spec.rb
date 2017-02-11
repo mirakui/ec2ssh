@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'ec2ssh/command/migrate'
 
 describe Ec2ssh::Command::Migrate do
+  include FakeFS::SpecHelpers
+
   describe '#run' do
     let(:cli) do
       double(:cli,

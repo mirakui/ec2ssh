@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'ec2ssh/command/remove'
 
 describe Ec2ssh::Command::Remove do
+  include FakeFS::SpecHelpers
+
   describe '#run' do
     let(:command) do
       described_class.new(cli).tap do |cmd|

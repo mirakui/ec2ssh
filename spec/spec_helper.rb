@@ -34,6 +34,4 @@ RSpec.configure do |config|
   end
 
   alias :silence :capture
-
-  config.include FakeFS::SpecHelpers
 end
