@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 gemspec
 
+gem 'rake', '>= 12.0.0'
 gem 'rspec', '~> 3.0'
 gem 'rspec-its', '~> 1.0'
 gem 'guard-rspec', '~> 4.3'
