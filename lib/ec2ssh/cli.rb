@@ -120,7 +120,7 @@ EOS
           require 'aws-sdk'
           logger = ::Logger.new($stdout)
           logger.level = ::Logger::DEBUG
-          ::AWS.config logger: logger
+          ::Aws.config.update logger: logger
         end
       end
 
