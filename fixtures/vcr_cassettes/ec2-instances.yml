@@ -1,0 +1,178 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://ec2.us-west-1.amazonaws.com/
+    body:
+      encoding: UTF-8
+      string: Action=DescribeInstances&Filter.1.Name=instance-state-name&Filter.1.Value.1=running&Timestamp=2017-02-11T09%3A25%3A44Z&Version=2014-10-01
+    headers:
+      Content-Type:
+      - application/x-www-form-urlencoded; charset=utf-8
+      Accept-Encoding:
+      - ''
+      Content-Length:
+      - '137'
+      User-Agent:
+      - aws-sdk-ruby/1.66.0 ruby/2.3.3 x86_64-darwin15 memoizing
+      Host:
+      - ec2.us-west-1.amazonaws.com
+      X-Amz-Date:
+      - 20170211T092544Z
+      X-Amz-Content-Sha256:
+      - b522eeb0f435881e058aaba87cf05aad80856e36205835b070f61e3a2cea2f66
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - text/xml;charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      Date:
+      - Sat, 11 Feb 2017 09:25:44 GMT
+      Server:
+      - AmazonEC2
+    body:
+      encoding: UTF-8
+      string: |-
+        <?xml version="1.0" encoding="UTF-8"?>
+        <DescribeInstancesResponse xmlns="http://ec2.amazonaws.com/doc/2014-10-01/">
+            <requestId>9b40910f-51b7-44e2-b75b-96078a730000</requestId>
+            <reservationSet>
+                <item>
+                    <reservationId>r-058c6185fab780000</reservationId>
+                    <ownerId>000000000000</ownerId>
+                    <groupSet/>
+                    <instancesSet>
+                        <item>
+                            <instanceId>i-09e547eca106b0000</instanceId>
+                            <imageId>ami-165a0000</imageId>
+                            <instanceState>
+                                <code>16</code>
+                                <name>running</name>
+                            </instanceState>
+                            <privateDnsName>ip-172-31-9-193.us-west-1.compute.internal</privateDnsName>
+                            <dnsName>ec2-54-215-142-250.us-west-1.compute.amazonaws.com</dnsName>
+                            <reason/>
+                            <keyName>aws.pem</keyName>
+                            <amiLaunchIndex>0</amiLaunchIndex>
+                            <productCodes/>
+                            <instanceType>t2.micro</instanceType>
+                            <launchTime>2017-02-11T09:22:47.000Z</launchTime>
+                            <placement>
+                                <availabilityZone>us-west-1c</availabilityZone>
+                                <groupName/>
+                                <tenancy>default</tenancy>
+                            </placement>
+                            <monitoring>
+                                <state>disabled</state>
+                            </monitoring>
+                            <subnetId>subnet-b02b0000</subnetId>
+                            <vpcId>vpc-f8790000</vpcId>
+                            <privateIpAddress>172.31.9.193</privateIpAddress>
+                            <ipAddress>54.215.142.250</ipAddress>
+                            <sourceDestCheck>true</sourceDestCheck>
+                            <groupSet>
+                                <item>
+                                    <groupId>sg-a83f0000</groupId>
+                                    <groupName>default</groupName>
+                                </item>
+                                <item>
+                                    <groupId>sg-4db20000</groupId>
+                                    <groupName>ssh</groupName>
+                                </item>
+                            </groupSet>
+                            <architecture>x86_64</architecture>
+                            <rootDeviceType>ebs</rootDeviceType>
+                            <rootDeviceName>/dev/xvda</rootDeviceName>
+                            <blockDeviceMapping>
+                                <item>
+                                    <deviceName>/dev/xvda</deviceName>
+                                    <ebs>
+                                        <volumeId>vol-02a0f01045aadbf7f</volumeId>
+                                        <status>attached</status>
+                                        <attachTime>2017-02-11T09:22:48.000Z</attachTime>
+                                        <deleteOnTermination>true</deleteOnTermination>
+                                    </ebs>
+                                </item>
+                            </blockDeviceMapping>
+                            <virtualizationType>hvm</virtualizationType>
+                            <clientToken>XDpiz1486804967277</clientToken>
+                            <tagSet>
+                                <item>
+                                    <key>Role</key>
+                                    <value>ec2ssh-test</value>
+                                </item>
+                                <item>
+                                    <key>Name</key>
+                                    <value>ec2ssh-test-02</value>
+                                </item>
+                            </tagSet>
+                            <hypervisor>xen</hypervisor>
+                            <networkInterfaceSet>
+                                <item>
+                                    <networkInterfaceId>eni-f79a7ff6</networkInterfaceId>
+                                    <subnetId>subnet-b02b2ef6</subnetId>
+                                    <vpcId>vpc-f879939d</vpcId>
+                                    <description/>
+                                    <ownerId>000000000000</ownerId>
+                                    <status>in-use</status>
+                                    <macAddress>06:05:50:b3:b3:d8</macAddress>
+                                    <privateIpAddress>172.31.9.193</privateIpAddress>
+                                    <privateDnsName>ip-172-31-9-193.us-west-1.compute.internal</privateDnsName>
+                                    <sourceDestCheck>true</sourceDestCheck>
+                                    <groupSet>
+                                        <item>
+                                            <groupId>sg-a83f0000</groupId>
+                                            <groupName>default</groupName>
+                                        </item>
+                                        <item>
+                                            <groupId>sg-4db20000</groupId>
+                                            <groupName>ssh</groupName>
+                                        </item>
+                                    </groupSet>
+                                    <attachment>
+                                        <attachmentId>eni-attach-e6ce6187</attachmentId>
+                                        <deviceIndex>0</deviceIndex>
+                                        <status>attached</status>
+                                        <attachTime>2017-02-11T09:22:47.000Z</attachTime>
+                                        <deleteOnTermination>true</deleteOnTermination>
+                                    </attachment>
+                                    <association>
+                                        <publicIp>54.215.142.250</publicIp>
+                                        <publicDnsName>ec2-54-215-142-250.us-west-1.compute.amazonaws.com</publicDnsName>
+                                        <ipOwnerId>amazon</ipOwnerId>
+                                    </association>
+                                    <privateIpAddressesSet>
+                                        <item>
+                                            <privateIpAddress>172.31.9.193</privateIpAddress>
+                                            <privateDnsName>ip-172-31-9-193.us-west-1.compute.internal</privateDnsName>
+                                            <primary>true</primary>
+                                            <association>
+                                            <publicIp>54.215.142.250</publicIp>
+                                            <publicDnsName>ec2-54-215-142-250.us-west-1.compute.amazonaws.com</publicDnsName>
+                                            <ipOwnerId>amazon</ipOwnerId>
+                                            </association>
+                                        </item>
+                                    </privateIpAddressesSet>
+                                </item>
+                            </networkInterfaceSet>
+                            <iamInstanceProfile>
+                                <arn>arn:aws:iam::000000000000:instance-profile/ec2ssh-test-role</arn>
+                                <id>AIPAJF7H4IAXZXXXXXXXX</id>
+                            </iamInstanceProfile>
+                            <ebsOptimized>false</ebsOptimized>
+                        </item>
+                    </instancesSet>
+                </item>
+            </reservationSet>
+        </DescribeInstancesResponse>
+    http_version:
+  recorded_at: Sat, 11 Feb 2017 09:25:45 GMT
+recorded_with: VCR 3.0.3
