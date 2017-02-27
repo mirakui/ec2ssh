@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'aws-sdk-v1'
 require 'ec2ssh/ec2_instances'
 
 describe 'aws-sdk compatibility' do
@@ -19,6 +18,8 @@ describe 'aws-sdk compatibility' do
 
   it { expect(ec2_instances.count).to be == 1 }
 
+  it { expect(ins.tags['Name']).to match /.+/ }
+  it { expect(ins.tags['Role']).to match /.+/ }
   it { expect(ins.ami_launch_index).to be == 0 }
   it { expect(ins.architecture).to be == :x86_64 }
   it { expect(ins.attachments.to_h).to match( root_device => an_instance_of(AWS::EC2::Attachment) ) }
