@@ -1,18 +1,17 @@
 require 'spec_helper'
 require 'aws-sdk-v1'
+require 'ec2ssh/ec2_instances'
 
 describe 'aws-sdk compatibility' do
   let(:region) { 'us-west-1' }
   let(:root_device) { '/dev/xvda' }
 
-  let(:ec2) do
-    AWS::EC2.new(region: region)
-  end
-
   let!(:ec2_instances) do
     VCR.use_cassette('ec2-instances') do
-      AWS.start_memoizing
-      ec2.instances.filter('instance-state-name', 'running').to_a
+      Ec2ssh::Ec2Instances.new(
+        {'foo' => {aws_access_key_id: '', aws_secret_access_key: ''}},
+        ['us-west-1']
+      ).instances('foo')
     end
   end
 
