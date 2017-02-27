@@ -9,7 +9,7 @@ describe 'aws-sdk compatibility' do
   let!(:ec2_instances) do
     VCR.use_cassette('ec2-instances') do
       Ec2ssh::Ec2Instances.new(
-        {'foo' => {aws_access_key_id: '', aws_secret_access_key: ''}},
+        {'foo' => {access_key_id: '', secret_access_key: ''}},
         ['us-west-1']
       ).instances('foo')
     end
