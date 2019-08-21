@@ -5,11 +5,17 @@ describe 'aws-sdk compatibility' do
   let(:region) { 'us-west-1' }
   let(:root_device) { '/dev/xvda' }
 
+  let(:container) do
+    Ec2ssh::Dsl::Container.new.tap do |c|
+      c.regions = ['us-west-1']
+    end
+  end
+
   let!(:ec2_instances) do
     VCR.use_cassette('ec2-instances') do
       Ec2ssh::Ec2Instances.new(
         {'foo' => {access_key_id: '', secret_access_key: ''}},
-        ['us-west-1']
+        container,
       ).instances('foo')
     end
   end

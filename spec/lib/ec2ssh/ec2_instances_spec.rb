@@ -11,8 +11,14 @@ describe Ec2ssh::Ec2Instances do
       "ap-northeast-1"
     }
 
+    let(:container) do
+      Ec2ssh::Dsl::Container.new.tap do |c|
+        c.regions = [region]
+      end
+    end
+
     let(:mock) do
-      described_class.new(profiles='', regions=[region]).tap do |e|
+      described_class.new(profiles='', container).tap do |e|
         allow(e).to receive(:ec2s) { ec2s }
         allow(e).to receive(:regions) { [region] }
       end
