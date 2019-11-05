@@ -14,8 +14,8 @@ module Ec2ssh
       aws_keys.each do |name, key|
         _ec2s[name] = {}
         @regions.each do |region|
-          options = key.merge region: region
-          _ec2s[name][region] = Aws::EC2::Resource.new options
+          client = Aws::EC2::Client.new region: region, credentials: key
+          _ec2s[name][region] = Aws::EC2::Resource.new client: client
         end
       end
       _ec2s
@@ -36,8 +36,7 @@ module Ec2ssh
     end
 
     def self.expand_profile_name_to_credential(profile_name)
-      provider = Aws::SharedCredentials.new(profile_name: profile_name)
-      provider.credentials
+      Aws::SharedCredentials.new(profile_name: profile_name)
     end
   end
 end
