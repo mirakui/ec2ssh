@@ -37,9 +37,9 @@ describe Ec2ssh::Ec2Instances do
     context 'with non-empty names' do
       let(:mock_instances) {
         [
-          double('instance', n: 1, tags: {'Name' => 'srvB' }),
-          double('instance', n: 2, tags: {'Name' => 'srvA' }),
-          double('instance', n: 3, tags: {'Name' => 'srvC' })
+          double('instance', n: 1, tags: [double('tag', key: 'Name', value: 'srvB')]),
+          double('instance', n: 2, tags: [double('tag', key: 'Name', value: 'srvA')]),
+          double('instance', n: 3, tags: [double('tag', key: 'Name', value: 'srvC')])
         ]
       }
 
@@ -52,9 +52,9 @@ describe Ec2ssh::Ec2Instances do
     context 'with names including empty one' do
       let(:mock_instances) {
         [
-          double('instance', n: 1, tags: {'Name' => 'srvA'}),
-          double('instance', n: 2, tags: {}),
-          double('instance', n: 3, tags: {'Name' => 'srvC' })
+          double('instance', n: 1, tags: [double('tag', key: 'Name', value: 'srvA')]),
+          double('instance', n: 2, tags: []),
+          double('instance', n: 3, tags: [double('tag', key: 'Name', value: 'srvC')])
         ]
       }
 
