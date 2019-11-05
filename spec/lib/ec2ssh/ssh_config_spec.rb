@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'ec2ssh/ssh_config'
 
 describe Ec2ssh::SshConfig do
+  include FakeFS::SpecHelpers
+
   let(:path) { Pathname('/ssh_config') }
 
   subject(:ssh_config) do

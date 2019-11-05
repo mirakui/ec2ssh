@@ -3,6 +3,8 @@ require 'ec2ssh/command/update'
 require 'ec2ssh/exceptions'
 
 describe Ec2ssh::Command::Update do
+  include FakeFS::SpecHelpers
+
   describe '#run' do
     let(:command) do
       described_class.new(cli).tap do |cmd|

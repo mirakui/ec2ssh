@@ -1,4 +1,8 @@
 # Change Log
+## 3.1.1
+* Fix a bug in `--verbose` option (#41)
+  Thanks to @adamlazz
+
 ## 3.1.0
 * Use credentials from `~/.aws/credentials` as default. Credential profiles are set as `profiles` in dotfile.
 * Revive path option for changing ssh config path (#34)

@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'ec2ssh/migrator'
 
 describe Ec2ssh::Migrator do
+  include FakeFS::SpecHelpers
+
   subject(:migrator) { described_class.new '/dotfile' }
 
   before do
