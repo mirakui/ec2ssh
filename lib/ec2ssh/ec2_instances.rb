@@ -36,7 +36,7 @@ module Ec2ssh
     end
 
     def self.expand_profile_name_to_credential(profile_name)
-      provider = Aws::SharedCredential.new(profile_name: profile_name)
+      provider = Aws::SharedCredentials.new(profile_name: profile_name)
       provider.credentials
     end
   end
