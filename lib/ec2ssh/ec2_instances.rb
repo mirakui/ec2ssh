@@ -57,7 +57,8 @@ module Ec2ssh
     end
 
     def self.expand_profile_name_to_credential(profile_name)
-      Aws::SharedCredentials.new(profile_name: profile_name)
+      client = Aws::STS::Client.new(profile: profile_name)
+      client.config.credentials
     end
   end
 end
