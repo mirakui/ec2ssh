@@ -48,7 +48,7 @@ regions 'us-east-1'
 reject {|instance| !instance.tags['Name'] }
 
 # You can use methods of AWS::EC2::Instance.
-# See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
+# See https://docs.aws.amazon.com/sdkforruby/api/index.html
 host_line <<END
 Host <%= tags['Name'] %>.<%= availability_zone %>
   HostName <%= dns_name || private_ip_address %>
