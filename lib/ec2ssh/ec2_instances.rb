@@ -17,7 +17,7 @@ module Ec2ssh
       private
 
       def method_missing(name, *args, &block)
-        @ec2_instance.send(name, *args, &block)
+        @ec2_instance.public_send(name, *args, &block)
       end
 
       def respond_to_missing?(symbol, include_private)
