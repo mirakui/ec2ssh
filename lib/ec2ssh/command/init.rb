@@ -33,13 +33,7 @@ module Ec2ssh
       def write_dotfile_example
         example = <<-DOTFILE
 path '#{ENV['HOME']}/.ssh/config'
-aws_keys(
-  default: {
-    access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-    secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-  },
-  # my_key1: { access_key_id: '...', secret_access_key: '...' }, ...
-)
+profiles 'default', 'myprofile'
 regions ENV['AWS_REGION'] || ENV['AMAZON_REGION'] || ENV['AWS_DEFAULT_REGION'] || 'us-east-1'
 # Enable regions as you like
 # regions *%w(ap-northeast-1 ap-southeast-1 ap-southeast-2 eu-west-1 sa-east-1 us-east-1 us-west-1 us-west-2)
@@ -47,8 +41,8 @@ regions ENV['AWS_REGION'] || ENV['AMAZON_REGION'] || ENV['AWS_DEFAULT_REGION'] |
 # You can use methods of AWS::EC2::Instance.
 # See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
 host_line <<END
-Host <%= tags['Name'] %>.<%= availability_zone %>
-  HostName <%= dns_name || private_ip_address %>
+Host <%= tag('Name') %>.<%= placement.availability_zone %>
+  HostName <%= public_dns_name || private_ip_address %>
 END
         DOTFILE
 
