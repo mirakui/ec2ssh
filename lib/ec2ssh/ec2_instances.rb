@@ -25,16 +25,15 @@ module Ec2ssh
       end
     end
 
-    def initialize(aws_keys, regions)
+    def initialize(aws_keys)
       @aws_keys = aws_keys
-      @regions = regions
     end
 
     def make_ec2s
       _ec2s = {}
-      aws_keys.each do |name, key|
+      aws_keys.each_pair do |name, keys|
         _ec2s[name] = {}
-        @regions.each do |region|
+        keys.each_pair do |region, key|
           client = Aws::EC2::Client.new region: region, credentials: key
           _ec2s[name][region] = Aws::EC2::Resource.new client: client
         end
@@ -47,7 +46,7 @@ module Ec2ssh
     end
 
     def instances(key_name)
-      @regions.map {|region|
+      aws_keys[key_name].each_key.map {|region|
         ec2s[key_name][region].instances(
           filters: [{ name: 'instance-state-name', values: ['running'] }]
         ).
@@ -56,8 +55,8 @@ module Ec2ssh
       }.flatten
     end
 
-    def self.expand_profile_name_to_credential(profile_name)
-      client = Aws::STS::Client.new(profile: profile_name)
+    def self.expand_profile_name_to_credential(profile_name, region)
+      client = Aws::STS::Client.new(profile: profile_name, region: region)
       client.config.credentials
     end
   end
