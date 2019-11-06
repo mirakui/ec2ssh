@@ -7,10 +7,11 @@ module Ec2ssh
     class InstanceWrapper
       def initialize(ec2_instance)
         @ec2_instance = ec2_instance
+        @_tags ||= @ec2_instance.tags.each_with_object({}) {|t, h| h[t.key] = t.value }
       end
 
-      def tags
-        @tags ||= @ec2_instance.tags.each_with_object({}) {|t, h| h[t.key] = t.value }
+      def tag(key)
+        @_tags[key]
       end
 
       private
@@ -52,7 +53,7 @@ module Ec2ssh
         ).
         to_a.
         map {|ins| InstanceWrapper.new(ins) }.
-        sort_by {|ins| ins.tags['Name'].to_s }
+        sort_by {|ins| ins.tag('Name').to_s }
       }.flatten
     end
 

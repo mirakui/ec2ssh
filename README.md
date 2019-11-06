@@ -45,12 +45,13 @@ profiles 'default', 'myprofile'
 regions 'us-east-1'
 
 # Ignore unnamed instances
-reject {|instance| !instance.tags['Name'] }
+reject {|instance| !instance.tag('Name') }
 
-# You can use methods of AWS::EC2::Instance.
+# You can use methods of AWS::EC2::Instance and tag(key) method
+.
 # See https://docs.aws.amazon.com/sdkforruby/api/index.html
 host_line <<END
-Host <%= tags['Name'] %>.<%= availability_zone %>
+Host <%= tag('Name') %>.<%= availability_zone %>
   HostName <%= dns_name || private_ip_address %>
 END
 ```

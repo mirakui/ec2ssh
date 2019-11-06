@@ -18,8 +18,9 @@ describe 'aws-sdk compatibility' do
 
   it { expect(ec2_instances.count).to be == 1 }
 
-  it { expect(ins.tags['Name']).to match /.+/ }
-  it { expect(ins.tags['Role']).to match /.+/ }
+  it { expect(ins.tag('Name')).to match /.+/ }
+  it { expect(ins.tag('Role')).to match /.+/ }
+  it { expect(ins.tags).to match_array([have_attributes(key: 'Name', value: /.+/), have_attributes(key: 'Role', value: /.+/)]) }
   it { expect(ins.ami_launch_index).to be == 0 }
   it { expect(ins.architecture).to be == 'x86_64' }
   it do
