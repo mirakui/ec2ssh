@@ -51,8 +51,8 @@ reject {|instance| !instance.tag('Name') }
 .
 # See https://docs.aws.amazon.com/sdkforruby/api/index.html
 host_line <<END
-Host <%= tag('Name') %>.<%= availability_zone %>
-  HostName <%= dns_name || private_ip_address %>
+Host <%= tag('Name') %>.<%= placement.availability_zone %>
+  HostName <%= public_dns_name || private_ip_address %>
 END
 ```
 
