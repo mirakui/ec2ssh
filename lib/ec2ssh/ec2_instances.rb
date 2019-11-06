@@ -51,7 +51,6 @@ module Ec2ssh
         ec2s[key_name][region].instances(
           filters: [{ name: 'instance-state-name', values: ['running'] }]
         ).
-        to_a.
         map {|ins| InstanceWrapper.new(ins) }.
         sort_by {|ins| ins.tag('Name').to_s }
       }.flatten
