@@ -7,10 +7,10 @@ describe Ec2ssh::Builder do
     let(:container) do
       Ec2ssh::Dsl::Container.new.tap do |c|
         c.aws_keys = {
-          key1: { access_key_id: 'KEY1', secret_access_key: 'SEC1' },
-          key2: { access_key_id: 'KEY2', secret_access_key: 'SEC2' }
+          'key1' => { 'us-west-1' => Aws::Credentials.new('KEY1', 'SEC1') },
+          'key2' => { 'us-west-1' => Aws::Credentials.new('KEY2', 'SEC2') }
         }
-        c.host_line = "Host <%= tags['Name'] %>"
+        c.host_line = "Host <%= tag('Name') %>"
       end
     end
 
@@ -28,12 +28,14 @@ describe Ec2ssh::Builder do
 
     let(:instances) do
       {
-        key1: [
-          double('instance', tags: {'Name' => 'srv1'}),
-          double('instance', tags: {'Name' => 'srv2'})],
-        key2: [
-          double('instance', tags: {'Name' => 'srv3'}),
-          double('instance', tags: {'Name' => 'srv4'})]
+        'key1' => [
+          double('instance').tap {|m| allow(m).to receive(:tag).with('Name').and_return('srv1') },
+          double('instance').tap {|m| allow(m).to receive(:tag).with('Name').and_return('srv2') }
+        ],
+        'key2' => [
+          double('instance').tap {|m| allow(m).to receive(:tag).with('Name').and_return('srv3') },
+          double('instance').tap {|m| allow(m).to receive(:tag).with('Name').and_return('srv4') }
+        ]
       }
     end
 
@@ -50,7 +52,7 @@ Host srv4
 
     context 'with #reject' do
       before do
-        container.reject = lambda {|ins| ins.tags['Name'] == 'srv1' }
+        container.reject = lambda {|ins| ins.tag('Name') == 'srv1' }
       end
 
       it do
@@ -67,10 +69,10 @@ Host srv4
     context 'checking erb trim_mode' do
       before do
         container.host_line = <<-END
-% if tags['Name']
-  <%- if tags['Name'] == 'srv3' -%>
-Host <%= tags['Name'] %>
-  HostName <%= tags['Name'] %>
+% if tag('Name')
+  <%- if tag('Name') == 'srv3' -%>
+Host <%= tag('Name') %>
+  HostName <%= tag('Name') %>
   <%- end -%>
 % end
         END
