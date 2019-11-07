@@ -3,7 +3,6 @@ require 'ec2ssh/command'
 require 'ec2ssh/ssh_config'
 require 'ec2ssh/builder'
 require 'ec2ssh/dsl'
-require 'ec2ssh/migrator'
 
 module Ec2ssh
   module Command
@@ -29,10 +28,6 @@ module Ec2ssh
 
       def dsl
         @dsl ||= Ec2ssh::Dsl::Parser.parse File.read(dotfile_path)
-      end
-
-      def migrator
-        @migrator ||= Migrator.new dotfile_path
       end
     end
   end
