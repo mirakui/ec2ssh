@@ -9,6 +9,7 @@ describe Ec2ssh::Command::Update do
     let(:command) do
       described_class.new(cli).tap do |cmd|
         allow(cmd).to receive(:options).and_return(options)
+        allow(cmd.builder).to receive(:aws_keys) { aws_keys }
         allow(cmd.builder.ec2s).to receive(:instances) { instances }
       end
     end
@@ -18,10 +19,13 @@ describe Ec2ssh::Command::Update do
     let(:cli) do
       double(:cli, options: options, red: nil, yellow: nil, green: nil)
     end
+    let(:aws_keys) do
+      {'default' => {'us-west-1' => Aws::Credentials.new('access_key_id', 'secret_access_key')}}
+    end
     let(:instances) do
       [
-        double('instance', tags: {'Name' => 'srv1'}, private_ip_address: '10.0.0.1'),
-        double('instance', tags: {'Name' => 'srv2'}, private_ip_address: '10.0.0.2')
+        double('instance', private_ip_address: '10.0.0.1').tap {|m| allow(m).to receive(:tag).with('Name').and_return('srv1') },
+        double('instance', private_ip_address: '10.0.0.2').tap {|m| allow(m).to receive(:tag).with('Name').and_return('srv2') }
       ]
     end
 
@@ -34,11 +38,10 @@ describe Ec2ssh::Command::Update do
       let(:ssh_config_str) { '' }
       let(:dotfile_str) { <<-END }
 path '/dotfile'
-aws_keys(
-  default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
-)
+profiles 'default'
+regions 'us-west-1'
 host_line <<EOS
-Host <%= tags['Name'] %>
+Host <%= tag('Name') %>
   HostName <%= private_ip_address %>
 EOS
       END
@@ -60,11 +63,10 @@ EOS
 
       let(:dotfile_str) { <<-END }
 path '/dotfile'
-aws_keys(
-  default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
-)
+profiles 'default'
+regions 'us-west-1'
 host_line <<EOS
-Host <%= tags['Name'] %>
+Host <%= tag('Name') %>
   HostName <%= private_ip_address %>
 EOS
       END
