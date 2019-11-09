@@ -2,7 +2,6 @@ require 'thor'
 require 'highline'
 require 'ec2ssh/ssh_config'
 require 'ec2ssh/exceptions'
-require 'ec2ssh/migrator'
 
 module Ec2ssh
   class CLI < Thor
@@ -12,7 +11,6 @@ module Ec2ssh
 
     desc 'init', 'Add ec2ssh mark to ssh_config'
     def init
-      check_dotfile_version
       command = make_command :init
       command.run
     rescue MarkAlreadyExists
@@ -22,7 +20,6 @@ module Ec2ssh
     desc 'update', 'Update ec2 hosts list in ssh_config'
     def update
       check_dotfile_existence
-      check_dotfile_version
       set_aws_logging
       command = make_command :update
       command.run
@@ -37,18 +34,11 @@ module Ec2ssh
     desc 'remove', 'Remove ec2ssh mark from ssh_config'
     def remove
       check_dotfile_existence
-      check_dotfile_version
       command = make_command :remove
       command.run
       green "Removed mark from #{command.ssh_config_path}"
     rescue MarkNotFound
       red "Marker not found in #{command.ssh_config_path}"
-    end
-
-    desc 'migrate', 'Migrate dotfile from old versions'
-    def migrate
-      command = make_command :migrate
-      command.run
     end
 
     desc 'shellcomp [-]', 'Initialize shell completion for bash/zsh'
@@ -90,16 +80,6 @@ EOS
     end
 
     no_tasks do
-      def check_dotfile_version
-        return unless File.exist?(options.dotfile)
-        migrator = Migrator.new options.dotfile
-        if migrator.check_version < '3'
-          red "#{options.dotfile} is old style."
-          red "Try '#{$0} migrate' to migrate to version 3"
-          abort
-        end
-      end
-
       def check_dotfile_existence
         unless File.exist?(options.dotfile)
           red "#{options.dotfile} doesn't exist."
