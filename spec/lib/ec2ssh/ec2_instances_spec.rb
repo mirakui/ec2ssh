@@ -62,6 +62,22 @@ describe Ec2ssh::Ec2Instances do
         expect(result.map {|ins| ins.n}).to match_array([2, 1, 3])
       end
     end
+  end
 
+  describe Ec2ssh::Ec2Instances::InstanceWrapper do
+    let(:mock_instance) {
+      double('instance', n: 1, tags: [double('tag', key: 'Name', value: 'srvA')])
+    }
+    let(:instance) { described_class.new(mock_instance) }
+
+    describe '#tag' do
+      it { expect(instance.tag('Name')).to eq 'srvA' }
+    end
+
+    describe '#tags' do
+      it { expect(instance.tags).to match_array(have_attributes(key: 'Name', value: 'srvA')) }
+      it { expect(instance.tags[0]).to have_attributes(key: 'Name', value: 'srvA') }
+      it { expect { instance.tags['Name'] }.to output("`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.\n").to_stderr.and raise_error TypeError }
+    end
   end
 end

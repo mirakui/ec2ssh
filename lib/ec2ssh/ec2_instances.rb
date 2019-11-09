@@ -5,6 +5,30 @@ module Ec2ssh
     attr_reader :ec2s, :aws_keys
 
     class InstanceWrapper
+      class TagsWrapper
+        def initialize(tags)
+          @tags = tags
+        end
+
+        # simulate
+        def [](key)
+          if key.is_a? ::String
+            warn '`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.'
+          end
+          super
+        end
+
+        private
+
+        def method_missing(name, *args, &block)
+          @tags.public_send(name, *args, &block)
+        end
+
+        def respond_to_missing?(symbol, include_private)
+          @tags.respond_to?(symbol, include_private)
+        end
+      end
+
       def initialize(ec2_instance)
         @ec2_instance = ec2_instance
         @_tags ||= @ec2_instance.tags.each_with_object({}) {|t, h| h[t.key] = t.value }
@@ -12,6 +36,10 @@ module Ec2ssh
 
       def tag(key)
         @_tags[key]
+      end
+
+      def tags
+        TagsWrapper.new(super)
       end
 
       private
