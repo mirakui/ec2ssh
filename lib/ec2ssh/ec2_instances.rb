@@ -13,7 +13,7 @@ module Ec2ssh
         # simulate
         def [](key)
           if key.is_a? ::String
-            warn '`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.'
+            abort '`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.'
           end
           super
         end
