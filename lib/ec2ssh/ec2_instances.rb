@@ -13,7 +13,10 @@ module Ec2ssh
         # simulate
         def [](key)
           if key.is_a? ::String
-            abort '`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.'
+            raise DotfileValidationError, <<-MSG
+`tags[String]` syntax in the dotfile has been deleted since v4.0. Use `tag(String)` instead.
+See: https://github.com/mirakui/ec2ssh#how-to-upgrade-from-3x
+            MSG
           end
           super
         end

@@ -14,7 +14,10 @@ module Ec2ssh
 
     def aws_keys(keys)
       unless keys.all? {|_, v| v.is_a?(Hash) && v.each_value.all? {|c| CREDENTIAL_CLASSES.any?(&c.method(:is_a?)) } }
-        abort 'aws_keys structure is changed. Please change your .ec2ssh syntax.'
+        raise DotfileValidationError, <<-MSG
+Since v4.0, `aws_keys` in the dotfile must be specified regions as a hash key.
+See: https://github.com/mirakui/ec2ssh#how-to-upgrade-from-3x
+        MSG
       end
       @_result.aws_keys = keys
     end
