@@ -7,12 +7,6 @@ _ec2ssh-init() {
     return $ret
 }
 
-_ec2ssh-migrate() {
-    local ret
-    _call_function ret __ec2ssh_noarg_cmd
-    return $ret
-}
-
 _ec2ssh-remove() {
     local ret
     _call_function ret __ec2ssh_noarg_cmd
@@ -80,7 +74,6 @@ _ec2ssh_commands() {
     _values 'command' \
         'help[Describe available commands or one specific command]' \
         'init[Add ec2ssh mark to ssh_config]' \
-        'migrate[Migrate dotfile from old versions]' \
         'remove[Remove ec2ssh mark from ssh_config]' \
         'update[Update ec2 hosts list in ssh_config]' \
         'version[Show version]'

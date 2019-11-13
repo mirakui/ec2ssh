@@ -6,7 +6,7 @@ _ec2ssh() {
     cur=$2
     prev=$3
 
-    subcmds="help init migrate remove update version"
+    subcmds="help init remove update version"
     common_opts="--dotfile --verbose"
 
     # contextual completion
