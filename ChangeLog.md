@@ -4,6 +4,8 @@
 * Support AssumeRole with `~/.aws/credentials` (#44)
 * `aws_keys` requires region (#44)
   Thanks to @yujideveloper
+* Support `filters` for listing ec2 instances (#43)
+  Thanks to @satotakumi
 
 ## 3.1.1
 * Fix a bug in `--verbose` option (#41)

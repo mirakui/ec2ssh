@@ -41,14 +41,18 @@ $ ec2ssh init
 ```
 $ vi ~/.ec2ssh
 ---
-profiles 'default', 'myprofile'
-regions 'us-east-1'
+profiles 'default', 'myprofile', ...
+regions 'us-east-1', 'ap-northeast-1', ...
 
 # Ignore unnamed instances
 reject {|instance| !instance.tag('Name') }
 
-# You can use methods of AWS::EC2::Instance and tag(key) method
-.
+# You can specify filters on DescribeInstances (default: lists 'running' status only)
+filters([
+  { name: 'instance-state-name', values: ['running', 'stopped'] }
+])
+
+# You can use methods of AWS::EC2::Instance and tag(key) method.
 # See https://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Instance.html
 host_line <<END
 Host <%= tag('Name') %>.<%= placement.availability_zone %>
