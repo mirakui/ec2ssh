@@ -47,7 +47,7 @@ regions 'us-east-1', 'ap-northeast-1', ...
 # Ignore unnamed instances
 reject {|instance| !instance.tag('Name') }
 
-# You can specify filters on DescribeInstances (default: lists 'running' status only)
+# You can specify filters on DescribeInstances (default: lists 'running' instances only)
 filters([
   { name: 'instance-state-name', values: ['running', 'stopped'] }
 ])
