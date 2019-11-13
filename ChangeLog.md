@@ -1,4 +1,10 @@
 # Change Log
+## 4.0.0
+* Use aws-sdk v2 and stop using v1 (#44)
+* Support AssumeRole with `~/.aws/credentials` (#44)
+* `aws_keys` requires region (#44)
+  Thanks to @yujideveloper
+
 ## 3.1.1
 * Fix a bug in `--verbose` option (#41)
   Thanks to @adamlazz
