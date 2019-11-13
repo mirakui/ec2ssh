@@ -45,13 +45,14 @@ profiles 'default', 'myprofile'
 regions 'us-east-1'
 
 # Ignore unnamed instances
-reject {|instance| !instance.tags['Name'] }
+reject {|instance| !instance.tag('Name') }
 
-# You can use methods of AWS::EC2::Instance.
-# See http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/EC2/Instance.html
+# You can use methods of AWS::EC2::Instance and tag(key) method
+.
+# See https://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Instance.html
 host_line <<END
-Host <%= tags['Name'] %>.<%= availability_zone %>
-  HostName <%= dns_name || private_ip_address %>
+Host <%= tag('Name') %>.<%= placement.availability_zone %>
+  HostName <%= public_dns_name || private_ip_address %>
 END
 ```
 
@@ -115,25 +116,14 @@ Host db-server-1.ap-southeast-1
 
 `ec2ssh remove` command removes the mark lines.
 
-# How to upgrade from 1.x to 2.x
-If you have used ec2ssh-1.x, it seems that you may not have '~/.ec2ssh'.
-So you need execute `ec2ssh init` once to create `~/.ec2ssh`, and edit it as you like.
+# How to upgrade from 3.x
+Dotfile (`.ec2ssh`) format has been changed from 3.x.  
 
-```
-$ ec2ssh init
-$ vi ~/.ec2ssh
-```
+* A instance tag access I/F has been changed from `tags['Name']` to `tag('Name')`
+* `Aws::EC2::Instance` methods have been changed to AWS SDK v2
+* The `aws_keys` structure have benn changed
+  * `aws_keys[profile_name][region] # => Aws::Credentials`
 
-# How to upgrade from 2.x to 3.x
-Dotfile (`.ec2ssh`) format has been changed from YAML to Ruby DSL.
-
-Don't panic and run `ec2ssh migrate` if you have ec2ssh-2.x styled dotfile.
-
-```
-$ ec2ssh migrate
-```
-
-This command converts your existing `.ec2ssh` file into 3.x style.
 
 # Notice
 `ec2ssh` command updates your `.ssh/config` file default. You should make a backup of it.

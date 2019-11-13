@@ -12,9 +12,8 @@ describe Ec2ssh::Ec2Instances do
     }
 
     let(:mock) do
-      described_class.new(profiles='', regions=[region]).tap do |e|
+      described_class.new({key_name => {region => ''}}).tap do |e|
         allow(e).to receive(:ec2s) { ec2s }
-        allow(e).to receive(:regions) { [region] }
       end
     end
 
@@ -37,9 +36,9 @@ describe Ec2ssh::Ec2Instances do
     context 'with non-empty names' do
       let(:mock_instances) {
         [
-          double('instance', n: 1, tags: {'Name' => 'srvB' }),
-          double('instance', n: 2, tags: {'Name' => 'srvA' }),
-          double('instance', n: 3, tags: {'Name' => 'srvC' })
+          double('instance', n: 1, tags: [double('tag', key: 'Name', value: 'srvB')]),
+          double('instance', n: 2, tags: [double('tag', key: 'Name', value: 'srvA')]),
+          double('instance', n: 3, tags: [double('tag', key: 'Name', value: 'srvC')])
         ]
       }
 
@@ -52,9 +51,9 @@ describe Ec2ssh::Ec2Instances do
     context 'with names including empty one' do
       let(:mock_instances) {
         [
-          double('instance', n: 1, tags: {'Name' => 'srvA'}),
-          double('instance', n: 2, tags: {}),
-          double('instance', n: 3, tags: {'Name' => 'srvC' })
+          double('instance', n: 1, tags: [double('tag', key: 'Name', value: 'srvA')]),
+          double('instance', n: 2, tags: []),
+          double('instance', n: 3, tags: [double('tag', key: 'Name', value: 'srvC')])
         ]
       }
 
@@ -63,6 +62,22 @@ describe Ec2ssh::Ec2Instances do
         expect(result.map {|ins| ins.n}).to match_array([2, 1, 3])
       end
     end
+  end
 
+  describe Ec2ssh::Ec2Instances::InstanceWrapper do
+    let(:mock_instance) {
+      double('instance', n: 1, tags: [double('tag', key: 'Name', value: 'srvA')])
+    }
+    let(:instance) { described_class.new(mock_instance) }
+
+    describe '#tag' do
+      it { expect(instance.tag('Name')).to eq 'srvA' }
+    end
+
+    describe '#tags' do
+      it { expect(instance.tags).to match_array(have_attributes(key: 'Name', value: 'srvA')) }
+      it { expect(instance.tags[0]).to have_attributes(key: 'Name', value: 'srvA') }
+      it { expect { instance.tags['Name'] }.to output("`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.\n").to_stderr.and raise_error SystemExit}
+    end
   end
 end

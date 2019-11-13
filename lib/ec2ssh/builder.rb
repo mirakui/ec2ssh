@@ -26,14 +26,17 @@ module Ec2ssh
     end
 
     def ec2s
-      @ec2s ||= Ec2Instances.new aws_keys, @container.regions
+      @ec2s ||= Ec2Instances.new aws_keys
     end
 
     def aws_keys
       @aws_keys ||= if @container.profiles
                       keys = {}
                       @container.profiles.each do |profile_name|
-                        keys[profile_name] = Ec2Instances.expand_profile_name_to_credential profile_name
+                        keys[profile_name] = {}
+                        @container.regions.each do |region|
+                          keys[profile_name][region] = Ec2Instances.expand_profile_name_to_credential profile_name, region
+                        end
                       end
                       keys
                     else

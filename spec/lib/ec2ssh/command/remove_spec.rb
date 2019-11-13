@@ -19,11 +19,10 @@ describe Ec2ssh::Command::Remove do
 
     let(:dotfile_str) { <<-END }
 path '/dotfile'
-aws_keys(
-  default: { access_key_id: 'ACCESS_KEY1', secret_access_key: 'SECRET1' }
-)
+profiles 'default'
+regions 'us-west-1'
 host_line <<EOS
-Host <%= tags['Name'] %>
+Host <%= tag('Name') %>
   HostName <%= private_ip_address %>
 EOS
     END

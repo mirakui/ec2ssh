@@ -1,14 +1,21 @@
 require 'ec2ssh/exceptions'
+require 'aws-sdk'
 
 module Ec2ssh
   class Dsl
     attr_reader :_result
+
+    CREDENTIAL_CLASSES = [Aws::Credentials, Aws::SharedCredentials, Aws::InstanceProfileCredentials, Aws::AssumeRoleCredentials].freeze
+    private_constant :CREDENTIAL_CLASSES
 
     def initialize
       @_result = Container.new
     end
 
     def aws_keys(keys)
+      unless keys.all? {|_, v| v.is_a?(Hash) && v.each_value.all? {|c| CREDENTIAL_CLASSES.any?(&c.method(:is_a?)) } }
+        abort 'aws_keys structure is changed. Please change your .ec2ssh syntax.'
+      end
       @_result.aws_keys = keys
     end
 

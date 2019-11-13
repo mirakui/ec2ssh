@@ -1,22 +1,69 @@
-require 'aws-sdk-v1'
+require 'aws-sdk'
 
 module Ec2ssh
   class Ec2Instances
     attr_reader :ec2s, :aws_keys
 
-    def initialize(aws_keys, regions)
+    class InstanceWrapper
+      class TagsWrapper
+        def initialize(tags)
+          @tags = tags
+        end
+
+        # simulate
+        def [](key)
+          if key.is_a? ::String
+            abort '`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.'
+          end
+          super
+        end
+
+        private
+
+        def method_missing(name, *args, &block)
+          @tags.public_send(name, *args, &block)
+        end
+
+        def respond_to_missing?(symbol, include_private)
+          @tags.respond_to?(symbol, include_private)
+        end
+      end
+
+      def initialize(ec2_instance)
+        @ec2_instance = ec2_instance
+        @_tags ||= @ec2_instance.tags.each_with_object({}) {|t, h| h[t.key] = t.value }
+      end
+
+      def tag(key)
+        @_tags[key]
+      end
+
+      def tags
+        TagsWrapper.new(super)
+      end
+
+      private
+
+      def method_missing(name, *args, &block)
+        @ec2_instance.public_send(name, *args, &block)
+      end
+
+      def respond_to_missing?(symbol, include_private)
+        @ec2_instance.respond_to?(symbol, include_private)
+      end
+    end
+
+    def initialize(aws_keys)
       @aws_keys = aws_keys
-      @regions = regions
     end
 
     def make_ec2s
-      AWS.start_memoizing
       _ec2s = {}
-      aws_keys.each do |name, key|
+      aws_keys.each_pair do |name, keys|
         _ec2s[name] = {}
-        @regions.each do |region|
-          options = key.merge ec2_region: region
-          _ec2s[name][region] = AWS::EC2.new options
+        keys.each_pair do |region, key|
+          client = Aws::EC2::Client.new region: region, credentials: key
+          _ec2s[name][region] = Aws::EC2::Resource.new client: client
         end
       end
       _ec2s
@@ -27,17 +74,18 @@ module Ec2ssh
     end
 
     def instances(key_name)
-      @regions.map {|region|
-        ec2s[key_name][region].instances.
-          filter('instance-state-name', 'running').
-          to_a.
-          sort_by {|ins| ins.tags['Name'].to_s }
+      aws_keys[key_name].each_key.map {|region|
+        ec2s[key_name][region].instances(
+          filters: [{ name: 'instance-state-name', values: ['running'] }]
+        ).
+        map {|ins| InstanceWrapper.new(ins) }.
+        sort_by {|ins| ins.tag('Name').to_s }
       }.flatten
     end
 
-    def self.expand_profile_name_to_credential(profile_name)
-      provider = AWS::Core::CredentialProviders::SharedCredentialFileProvider.new(profile_name: profile_name)
-      provider.credentials
+    def self.expand_profile_name_to_credential(profile_name, region)
+      client = Aws::STS::Client.new(profile: profile_name, region: region)
+      client.config.credentials
     end
   end
 end
