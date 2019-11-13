@@ -77,7 +77,7 @@ describe Ec2ssh::Ec2Instances do
     describe '#tags' do
       it { expect(instance.tags).to match_array(have_attributes(key: 'Name', value: 'srvA')) }
       it { expect(instance.tags[0]).to have_attributes(key: 'Name', value: 'srvA') }
-      it { expect { instance.tags['Name'] }.to output("`tags[String]` syntax is deleted. Please upgrade your .ec2ssh syntax.\n").to_stderr.and raise_error SystemExit}
+      it { expect { instance.tags['Name'] }.to raise_error Ec2ssh::DotfileValidationError }
     end
   end
 end

@@ -84,6 +84,6 @@ path 'path'
 END
     end
 
-    it { expect { Ec2ssh::Dsl::Parser.parse dsl_str }.to output("aws_keys structure is changed. Please change your .ec2ssh syntax.\n").to_stderr.and(raise_error(SystemExit)) }
+    it { expect { Ec2ssh::Dsl::Parser.parse dsl_str }.to raise_error Ec2ssh::DotfileValidationError }
   end
 end
