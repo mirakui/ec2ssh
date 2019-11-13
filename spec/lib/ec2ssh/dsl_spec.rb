@@ -86,4 +86,22 @@ END
 
     it { expect { Ec2ssh::Dsl::Parser.parse dsl_str }.to raise_error Ec2ssh::DotfileValidationError }
   end
+
+  context 'with filters' do
+    let(:dsl_str) do
+<<-END
+regions 'ap-northeast-1', 'us-east-1'
+filters [{
+  name: 'instance-state-name',
+  values: ['running', 'stopped']
+}]
+END
+    end
+
+    subject(:result) { Ec2ssh::Dsl::Parser.parse dsl_str }
+
+    it do
+      expect(result.filters).to eq([{name:'instance-state-name', values:['running', 'stopped']}])
+    end
+  end
 end

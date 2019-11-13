@@ -56,8 +56,9 @@ See: https://github.com/mirakui/ec2ssh#how-to-upgrade-from-3x
       end
     end
 
-    def initialize(aws_keys)
+    def initialize(aws_keys, filters)
       @aws_keys = aws_keys
+      @filters = filters
     end
 
     def make_ec2s
@@ -79,7 +80,7 @@ See: https://github.com/mirakui/ec2ssh#how-to-upgrade-from-3x
     def instances(key_name)
       aws_keys[key_name].each_key.map {|region|
         ec2s[key_name][region].instances(
-          filters: [{ name: 'instance-state-name', values: ['running'] }]
+          filters: @filters
         ).
         map {|ins| InstanceWrapper.new(ins) }.
         sort_by {|ins| ins.tag('Name').to_s }

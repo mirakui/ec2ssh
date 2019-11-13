@@ -8,7 +8,8 @@ describe 'aws-sdk compatibility' do
   let!(:ec2_instances) do
     VCR.use_cassette('ec2-instances') do
       Ec2ssh::Ec2Instances.new(
-        {'foo' => {'us-west-1' => Aws::Credentials.new('access_key_id', 'secret_access_key')}}
+        {'foo' => {'us-west-1' => Aws::Credentials.new('access_key_id', 'secret_access_key')}},
+        [{ name: 'instance-state-name', values: ['running'] }]
       ).instances('foo')
     end
   end

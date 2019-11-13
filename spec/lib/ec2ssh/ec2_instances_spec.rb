@@ -12,7 +12,10 @@ describe Ec2ssh::Ec2Instances do
     }
 
     let(:mock) do
-      described_class.new({key_name => {region => ''}}).tap do |e|
+      described_class.new(
+        {key_name => {region => ''}},
+        [{ name: 'instance-state-name', values: ['running'] }]
+      ).tap do |e|
         allow(e).to receive(:ec2s) { ec2s }
       end
     end

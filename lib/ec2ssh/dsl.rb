@@ -38,6 +38,10 @@ See: https://github.com/mirakui/ec2ssh#how-to-upgrade-from-3x
       @_result.reject = block
     end
 
+    def filters(filters)
+      @_result.filters = filters
+    end
+
     def path(str)
       @_result.path = str
     end
@@ -48,6 +52,7 @@ See: https://github.com/mirakui/ec2ssh#how-to-upgrade-from-3x
       regions
       host_line
       reject
+      filters
       path
     ])
     end

@@ -26,7 +26,7 @@ module Ec2ssh
     end
 
     def ec2s
-      @ec2s ||= Ec2Instances.new aws_keys
+      @ec2s ||= Ec2Instances.new aws_keys, filters
     end
 
     def aws_keys
@@ -42,6 +42,13 @@ module Ec2ssh
                     else
                       @container.aws_keys
                     end
+    end
+
+    def filters
+      @filters = @container.filters || [{
+        name: 'instance-state-name',
+        values: ['running']
+      }]
     end
   end
 end
