@@ -117,13 +117,21 @@ Host db-server-1.ap-southeast-1
 `ec2ssh remove` command removes the mark lines.
 
 # How to upgrade from 3.x
-Dotfile (`.ec2ssh`) format has been changed from 3.x.  
+Dotfile (`.ec2ssh`) format has been changed from 3.x.
 
 * A instance tag access I/F has been changed from `tags['Name']` to `tag('Name')`
 * `Aws::EC2::Instance` methods have been changed to AWS SDK v2
 * The `aws_keys` structure have benn changed
   * `aws_keys[profile_name][region] # => Aws::Credentials`
+  * For example:
 
+```
+aws_keys(
+  my_prof1: {
+    'ap-northeast-1' => Aws::Credentials.new(ENV['AWS_ACCESS_KEY_ID'], ENV['AWS_SECRET_ACCESS_KEY'])
+  }
+)
+```
 
 # Notice
 `ec2ssh` command updates your `.ssh/config` file default. You should make a backup of it.
@@ -132,4 +140,4 @@ Dotfile (`.ec2ssh`) format has been changed from 3.x.
 Use `zsh/_ec2ssh`.
 
 # License
-Copyright (c) 2014 Issei Naruta. ec2ssh is released under the MIT license.
+Copyright (c) 2019 Issei Naruta. ec2ssh is released under the MIT license.
