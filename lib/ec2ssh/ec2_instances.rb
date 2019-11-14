@@ -1,4 +1,5 @@
 require 'aws-sdk'
+require 'ec2ssh/exceptions'
 
 module Ec2ssh
   class Ec2Instances
