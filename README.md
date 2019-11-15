@@ -1,3 +1,4 @@
+[![Gem Version](https://badge.fury.io/rb/ec2ssh.svg)](https://badge.fury.io/rb/ec2ssh)
 [![Build Status](https://travis-ci.org/mirakui/ec2ssh.png?branch=master)](https://travis-ci.org/mirakui/ec2ssh)
 
 # Introduction
