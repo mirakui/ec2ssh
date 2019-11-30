@@ -1,5 +1,5 @@
 require 'ec2ssh/exceptions'
-require 'aws-sdk'
+require 'aws-sdk-core'
 
 module Ec2ssh
   class Dsl

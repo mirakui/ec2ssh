@@ -125,7 +125,7 @@ Host db-server-1.ap-southeast-1
 Dotfile (`.ec2ssh`) format has been changed from 3.x.
 
 * A instance tag access I/F has been changed from `tags['Name']` to `tag('Name')`
-* `Aws::EC2::Instance` methods have been changed to AWS SDK v2
+* `Aws::EC2::Instance` methods have been changed to AWS SDK v3
 * The `aws_keys` structure has been changed
   * `aws_keys[profile_name][region] # => Aws::Credentials`
   * For example:
