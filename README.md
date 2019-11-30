@@ -54,7 +54,7 @@ filters([
 ])
 
 # You can use methods of AWS::EC2::Instance and tag(key) method.
-# See https://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Instance.html
+# See https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/EC2/Instance.html
 host_line <<END
 Host <%= tag('Name') %>.<%= placement.availability_zone %>
   HostName <%= public_dns_name || private_ip_address %>
