@@ -16,7 +16,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency "thor", ">= 0.14", "< 2.0"
   s.add_dependency "highline", ">= 1.6", "< 3.0"
-  s.add_dependency "aws-sdk", "~> 2"
+  s.add_dependency "aws-sdk-core", "~> 3"
+  s.add_dependency "aws-sdk-ec2", "~> 1"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

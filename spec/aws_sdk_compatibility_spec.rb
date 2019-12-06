@@ -42,14 +42,13 @@ describe 'aws-sdk compatibility' do
   it { expect(ins.client_token).to match /\A\w{18}\z/ }
   # it { expect(ins.cpu_options).to be_nil }
   it { expect(ins.ebs_optimized).to be_falsy }
-  # it { expect(ins.elastic_gpu_associations).to be_nil }
+  it { expect(ins.elastic_gpu_associations).to be_nil }
   # it { expect(ins.elastic_inference_accelerator_associations).to be_nil }
-  # it { expect(ins.ena_support).to be_falsy }
+  it { expect(ins.ena_support).to be_falsy }
   # it { expect(ins.hibernation_options).to be_nil}
   it { expect(ins.hypervisor).to be == 'xen' }
   it { expect(ins.iam_instance_profile).to have_attributes(arn: /\Aarn:aws:iam::\d+:instance-profile\/[\w\-]+\z/, id: /\A\w{21}\z/) }
   it { expect(ins.id).to match /\Ai-\w+\z/ }
-  it { expect(ins.identifiers).to match(id: /\Ai-\w+\z/) }
   it { expect(ins.image).to be_a(Aws::EC2::Image) }
   it { expect(ins.image_id).to match /\Aami-\w+\z/ }
   it { expect(ins.instance_id).to match /\Ai-\w+\z/ }
@@ -57,7 +56,7 @@ describe 'aws-sdk compatibility' do
   it { expect(ins.instance_type).to match /\A[trmci][1248]\.\w+\z/ }
   it { expect(ins.kernel_id).to be_nil }
   it { expect(ins.key_name).to match /\A.+\.pem\z/ }
-  # it { expect(ins.key_pair).to be_a(Aws::EC2::KeyPairInfo) }
+  it { expect(ins.key_pair).to be_a(Aws::EC2::KeyPairInfo) }
   it { expect(ins.launch_time).to be_a(Time) }
   # it { expect(ins.licenses).to all have_attributes(license_configuration_arn: '') }
   it { expect(ins.monitoring).to have_attributes(state: 'disabled') }

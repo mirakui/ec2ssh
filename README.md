@@ -54,7 +54,7 @@ filters([
 ])
 
 # You can use methods of AWS::EC2::Instance and tag(key) method.
-# See https://docs.aws.amazon.com/sdkforruby/api/Aws/EC2/Instance.html
+# See https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/EC2/Instance.html
 host_line <<END
 Host <%= tag('Name') %>.<%= placement.availability_zone %>
   HostName <%= public_dns_name || private_ip_address %>
@@ -125,7 +125,7 @@ Host db-server-1.ap-southeast-1
 Dotfile (`.ec2ssh`) format has been changed from 3.x.
 
 * A instance tag access I/F has been changed from `tags['Name']` to `tag('Name')`
-* `Aws::EC2::Instance` methods have been changed to AWS SDK v2
+* `Aws::EC2::Instance` methods have been changed to AWS SDK v3
 * The `aws_keys` structure has been changed
   * `aws_keys[profile_name][region] # => Aws::Credentials`
   * For example:

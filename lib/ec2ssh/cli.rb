@@ -97,7 +97,7 @@ EOS
       def set_aws_logging
         if options.verbose
           require 'logger'
-          require 'aws-sdk'
+          require 'aws-sdk-core'
           logger = ::Logger.new($stdout)
           logger.level = ::Logger::DEBUG
           ::Aws.config.update logger: logger

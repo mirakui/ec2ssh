@@ -1,4 +1,5 @@
-require 'aws-sdk'
+require 'aws-sdk-core'
+require 'aws-sdk-ec2'
 require 'ec2ssh/exceptions'
 
 module Ec2ssh
