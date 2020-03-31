@@ -1,4 +1,11 @@
 # Change Log
+
+## Unreleased
+* Use aws-sdk v3 and stop using v2 (#54)
+* Delete `rubyforge_project=` in gemspec (#51)
+* Relax thor and highline versions (#49)
+* CI against Ruby 2.5, 2.6 and 2.7 (#45, #55)
+
 ## 4.0.0
 * Use aws-sdk v2 and stop using v1 (#44)
 * Support AssumeRole with `~/.aws/credentials` (#44)
