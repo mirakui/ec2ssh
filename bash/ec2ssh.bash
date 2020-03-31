@@ -7,7 +7,7 @@ _ec2ssh() {
     prev=$3
 
     subcmds="help init remove update version"
-    common_opts="--dotfile --verbose"
+    common_opts="--path --dotfile --verbose"
 
     # contextual completion
     case $prev in
@@ -21,11 +21,7 @@ _ec2ssh() {
             esac
             return 0
             ;;
-        --aws-key)
-            COMPREPLY=()
-            return 0;
-            ;;
-        --dotfile)
+        --path | --dotfile)
             COMPREPLY=( $(compgen -o default -- "$cur"))
             return 0;
             ;;
@@ -35,9 +31,6 @@ _ec2ssh() {
     subcmd=${COMP_WORDS[1]}
 
     case $subcmd in
-        update)
-            COMPREPLY=( $(compgen -W "--aws-key $common_opts" -- "$cur") )
-            ;;
         help)
             COMPREPLY=( $(compgen -W "$subcmds" $cur) )
             ;;
