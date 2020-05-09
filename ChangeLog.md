@@ -6,6 +6,7 @@
 * Delete `rubyforge_project=` in gemspec (#51)
 * Relax thor and highline versions (#49)
 * CI against Ruby 2.5, 2.6 and 2.7 (#45, #55)
+* Drop support outdated Ruby 2.2 and 2.3 (#59)
 
 ## 4.0.0
 * Use aws-sdk v2 and stop using v1 (#44)
