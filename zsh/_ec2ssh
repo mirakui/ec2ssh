@@ -3,40 +3,35 @@
 # main completion function
 _ec2ssh-init() {
     local ret
-    _call_function ret __ec2ssh_noarg_cmd
+    _call_function ret __ec2ssh_common_cmd
     return $ret
 }
 
 _ec2ssh-remove() {
     local ret
-    _call_function ret __ec2ssh_noarg_cmd
+    _call_function ret __ec2ssh_common_cmd
     return $ret
 }
 
 _ec2ssh-update() {
-    local curcontext context state line
-    declare -A opt_args
-
-    integer ret=1
-    _arguments -C -S \
-               '--aws-key:aws key name' \
-               '--dotfile:ec2ssh dotfile:_files' \
-               '--verbose' && return
+    local ret
+    _call_function ret __ec2ssh_common_cmd
     return $ret
 }
 
 _ec2ssh-version() {
     local ret
-    _call_function ret __ec2ssh_noarg_cmd
+    _call_function ret __ec2ssh_common_cmd
     return $ret
 }
 
-__ec2ssh_noarg_cmd() {
+__ec2ssh_common_cmd() {
     local curcontext context state line
     declare -A opt_args
 
     integer ret=1
     _arguments -C -S \
+        '--path:ssh_config file:_files' \
         '--dotfile:ec2ssh dotfile:_files' \
         '--verbose' && return
     return $ret
@@ -49,6 +44,7 @@ _ec2ssh() {
     integer ret=1
 
     _arguments -C -S \
+        '--path:ssh_config file:_files' \
         '--dotfile:ec2ssh dotfile:_files' \
         '--verbose' \
         '(-): :->commands' \
