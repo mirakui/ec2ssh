@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 5.0.0
 * Remove `--aws-key` option and add `--path` option in shellcomp (#56)
 * Use aws-sdk v3 and stop using v2 (#54)
 * Delete `rubyforge_project=` in gemspec (#51)
