@@ -6,9 +6,7 @@ module Ec2ssh
   class Builder
     def initialize(container)
       @container = container
-      safe_level = nil
-      erb_trim_mode = '%-'
-      @host_lines_erb = ERB.new @container.host_line, safe_level, erb_trim_mode
+      @host_lines_erb = ERB.new @container.host_line, trim_mode: '%-'
     end
 
     def build_host_lines
