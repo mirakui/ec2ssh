@@ -1,5 +1,11 @@
 # Change Log
 
+## Unreleased
+* Drop support outdated Ruby 2.4 and 2.5 (#60, #61)
+* CI against for Ruby 3.0 and 3.1 (#61)
+* Fix arguments warnings of ERB.new on Ruby 3.1 (#61)
+* Migrate CI from TravisCI to GitHub Actions (#62)
+
 ## 5.0.0
 * Remove `--aws-key` option and add `--path` option in shellcomp (#56)
 * Use aws-sdk v3 and stop using v2 (#54)
