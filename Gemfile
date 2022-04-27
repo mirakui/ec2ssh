@@ -11,4 +11,4 @@ gem 'timecop', '~> 0.9'
 gem 'fakefs', '~> 1.4', require: 'fakefs/safe'
 gem 'vcr', '~> 6.1'
 
-gem 'rexml' if RUBY_VERSION >= '2.8.0'
+gem 'rexml' if RUBY_VERSION >= '3.0.0'
