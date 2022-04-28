@@ -145,4 +145,4 @@ aws_keys(
 Use `zsh/_ec2ssh`.
 
 # License
-Copyright (c) 2020 Issei Naruta. ec2ssh is released under the MIT license.
+Copyright (c) 2022 Issei Naruta. ec2ssh is released under the MIT license.

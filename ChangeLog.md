@@ -1,6 +1,6 @@
 # Change Log
 
-## Unreleased
+## 5.1.0
 * Drop support outdated Ruby 2.4 and 2.5 (#60, #61)
 * CI against for Ruby 3.0 and 3.1 (#61)
 * Fix arguments warnings of ERB.new on Ruby 3.1 (#61)
