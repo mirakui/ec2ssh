@@ -114,5 +114,9 @@ EOS
         end
       end
     end
+
+    def self.exit_on_failure?
+      false
+    end
   end
 end
